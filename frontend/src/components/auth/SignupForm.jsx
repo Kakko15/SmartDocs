@@ -126,7 +126,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
   };
 
   return (
-    <form onSubmit={handleSignUp} className="space-y-5">
+    <form onSubmit={handleSignUp} className="space-y-3">
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>First Name</label>
@@ -136,7 +136,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
             onChange={(e) => setSignUpData({ ...signUpData, firstName: e.target.value })} 
             onBlur={() => handleBlur('firstName')}
             required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('firstName', signUpData.firstName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            className={`w-full border rounded-xl px-4 py-2 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('firstName', signUpData.firstName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
           />
           <AnimatePresence>
             {getFieldError('firstName', signUpData.firstName) && (
@@ -160,7 +160,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
             onChange={(e) => setSignUpData({ ...signUpData, lastName: e.target.value })}
             onBlur={() => handleBlur('lastName')} 
             required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('lastName', signUpData.lastName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            className={`w-full border rounded-xl px-4 py-2 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('lastName', signUpData.lastName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
           />
           <AnimatePresence>
             {getFieldError('lastName', signUpData.lastName) && (
@@ -186,7 +186,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
           onChange={(e) => setEmail(e.target.value)} 
           onBlur={() => handleBlur('email')}
           required 
-          className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('email', email) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+          className={`w-full border rounded-xl px-4 py-2 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('email', email) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
         />
          <AnimatePresence>
             {getFieldError('email', email) && (
@@ -229,7 +229,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
                 onChange={(e) => setSignUpData({ ...signUpData, studentNumber: e.target.value })} 
                 onBlur={() => handleBlur('studentNumber')}
                 required 
-                className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('studentNumber', signUpData.studentNumber) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
+                className={`w-full border rounded-xl px-4 py-2 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('studentNumber', signUpData.studentNumber) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
               />
               <AnimatePresence>
                 {getFieldError('studentNumber', signUpData.studentNumber) && (
@@ -253,7 +253,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
                 onChange={(e) => setSignUpData({ ...signUpData, courseYear: e.target.value })} 
                 onBlur={() => handleBlur('courseYear')}
                 required 
-                className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('courseYear', signUpData.courseYear) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
+                className={`w-full border rounded-xl px-4 py-2 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('courseYear', signUpData.courseYear) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
               />
               <AnimatePresence>
                 {getFieldError('courseYear', signUpData.courseYear) && (
@@ -282,7 +282,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
             onFocus={() => setIsPasswordFocused(true)}
             onBlur={() => handleBlur('password')}
             required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('password', password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            className={`w-full border rounded-xl px-4 py-2 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('password', password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
           />
           <div className="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
             <AnimatePresence>
@@ -341,7 +341,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
             onChange={(e) => setConfirmPassword(e.target.value)} 
             onBlur={() => handleBlur('confirmPassword')}
             required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('confirmPassword', confirmPassword, password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            className={`w-full border rounded-xl px-4 py-2 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('confirmPassword', confirmPassword, password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
           />
           <div className="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
              <AnimatePresence>
@@ -410,7 +410,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
         {loading ? 'Processing...' : 'Create Account'}
       </motion.button>
       
-       <div className="relative mt-8 mb-6">
+       <div className="relative mt-4 mb-4">
         <div className="absolute inset-0 flex items-center">
           <div className={`w-full border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}></div>
         </div>
