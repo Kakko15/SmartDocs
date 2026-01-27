@@ -50,7 +50,7 @@ function App() {
         setAppMode('landing');
         sessionStorage.setItem('hasSeenLoader', 'true');
         sessionStorage.setItem('currentAppMode', 'landing');
-      }, 3000);
+      }, 1000);
       return () => clearTimeout(timer);
     }
   }, [appMode]);

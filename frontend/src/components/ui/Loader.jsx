@@ -2,46 +2,43 @@ import React from 'react';
 import { motion } from 'framer-motion';
 
 const Loader = () => {
-  // Staggered levitation animation for the stack layers
   const stackVariants = {
     animate: (index) => ({
       y: [0, -24, 0],
       scale: [1, 1.05, 1],
-      rotate: [45, 45, 45], // Keep isometric angle
+      rotate: [45, 45, 45],
       filter: [
         'brightness(1) blur(0px)',
         'brightness(1.2) blur(0px)',
         'brightness(1) blur(0px)'
       ],
       transition: {
-        duration: 2.4,
+        duration: 1.2,
         repeat: Infinity,
         ease: "easeInOut",
-        delay: index * 0.15, // Creates the fluid "wave" motion
+        delay: index * 0.08,
         times: [0, 0.5, 1]
       },
     }),
   };
 
-  // Shadow expands/shrinks based on the stack's height
   const shadowVariants = {
     animate: {
       scale: [1, 0.6, 1],
       opacity: [0.3, 0.1, 0.3],
       transition: {
-        duration: 2.4,
+        duration: 1.2,
         repeat: Infinity,
         ease: "easeInOut",
       },
     }
   };
 
-  // Moving grid background
   const gridVariants = {
     animate: {
       backgroundPosition: ["0% 0%", "100% 100%"],
       transition: {
-        duration: 20,
+        duration: 10,
         repeat: Infinity,
         ease: "linear"
       }
@@ -51,12 +48,9 @@ const Loader = () => {
   return (
     <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center bg-[#021205] overflow-hidden perspective-[1000px]">
       
-      {/* --- Spatial Environment --- */}
       <div className="absolute inset-0 z-0 pointer-events-none">
-        {/* Deep Atmospheric Glow */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-primary-900/30 via-[#021205] to-[#021205]" />
         
-        {/* Cybernetic Grid Floor */}
         <motion.div 
           variants={gridVariants}
           animate="animate"
@@ -72,25 +66,20 @@ const Loader = () => {
           }}
         />
         
-        {/* Floating Particles/Dust */}
         <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-secondary-400/20 rounded-full blur-[1px] animate-pulse" />
         <div className="absolute bottom-1/3 right-1/4 w-1 h-1 bg-primary-400/30 rounded-full blur-[0.5px] animate-bounce" />
       </div>
 
-      {/* --- The Quantum Stack --- */}
       <div className="relative z-10 flex flex-col items-center">
         
-        {/* Stack Container */}
         <div className="relative w-32 h-32 mb-10 flex items-center justify-center">
           
-          {/* Dynamic Shadow */}
           <motion.div
             variants={shadowVariants}
             animate="animate"
             className="absolute bottom-[-10px] w-20 h-6 bg-black/60 blur-lg rounded-[100%]"
           />
 
-          {/* Layer 1: Base (Deep Foundation) */}
           <motion.div
             custom={0}
             variants={stackVariants}
@@ -99,7 +88,6 @@ const Loader = () => {
             style={{ top: '20px' }}
           />
 
-          {/* Layer 2: Core (Gold Value) */}
           <motion.div
             custom={1}
             variants={stackVariants}
@@ -108,7 +96,6 @@ const Loader = () => {
             style={{ top: '0px' }}
           />
 
-          {/* Layer 3: Interface (Glass/Hologram) */}
           <motion.div
             custom={2}
             variants={stackVariants}
@@ -116,10 +103,8 @@ const Loader = () => {
             className="absolute w-20 h-20 bg-gradient-to-br from-white/90 via-primary-50 to-white/40 rounded-2xl shadow-[0_0_40px_rgba(34,197,94,0.4)] border border-white/60 z-30 backdrop-blur-md"
             style={{ top: '-20px' }}
           >
-            {/* Holographic Shine Effect */}
             <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent rounded-2xl opacity-50" />
             
-            {/* Center Chip/Logo Mark */}
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-8 h-8 border-[2px] border-primary-500/30 rounded-lg flex items-center justify-center">
                <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse" />
             </div>
@@ -127,7 +112,6 @@ const Loader = () => {
 
         </div>
 
-        {/* --- Text & Status --- */}
         <div className="flex flex-col items-center space-y-3">
           <motion.div 
             initial={{ opacity: 0, y: 10 }}
@@ -140,10 +124,10 @@ const Loader = () => {
               <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-400 to-primary-200 drop-shadow-[0_0_15px_rgba(34,197,94,0.5)]">Docs</span>
             </h1>
             
-            {/* Shimmer Overlay on Text */}
             <motion.div
               animate={{ x: ['-100%', '200%'] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 1 }}
+
+              transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut", repeatDelay: 0.5 }}
               className="absolute inset-0 bg-gradient-to-r from-transparent via-white/10 to-transparent skew-x-12 pointer-events-none"
             />
           </motion.div>
