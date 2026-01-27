@@ -410,13 +410,10 @@ export default function SignupForm({ onSwitchMode, isDark }) {
         {loading ? 'Processing...' : 'Create Account'}
       </motion.button>
       
-       <div className="relative mt-4 mb-4">
-        <div className="absolute inset-0 flex items-center">
-          <div className={`w-full border-t ${isDark ? 'border-slate-700' : 'border-gray-200'}`}></div>
-        </div>
-        <div className="relative flex justify-center text-sm">
-          <span className={`px-4 font-medium transition-colors ${isDark ? 'bg-transparent text-slate-400 bg-slate-900' : 'bg-white text-gray-500'}`}>Or sign up with</span>
-        </div>
+       <div className="flex items-center gap-4 mt-4 mb-4">
+        <div className={`h-px flex-1 ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}></div>
+        <span className={`text-sm font-medium transition-colors shrink-0 ${isDark ? 'text-slate-400' : 'text-gray-500'}`}>Or sign up with</span>
+        <div className={`h-px flex-1 ${isDark ? 'bg-slate-700' : 'bg-gray-200'}`}></div>
       </div>
 
       <div className="grid grid-cols-2 gap-4">

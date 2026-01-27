@@ -48,7 +48,7 @@ export default function AuthPage({ onBackToHome, isDark }) {
           layout: { duration: 0.3, ease: "easeInOut" },
           opacity: { duration: 0.5 },
         }}
-        className={`w-full max-w-[500px] rounded-3xl relative z-20 transition-all duration-500 ${isDark ? 'spatial-glass-dark' : 'spatial-glass'}`}
+        className={`w-full max-w-[500px] rounded-3xl overflow-hidden relative z-20 transition-all duration-500 ${isDark ? 'spatial-glass-dark' : 'spatial-glass'}`}
       >
         {/* Header Section */}
         <div

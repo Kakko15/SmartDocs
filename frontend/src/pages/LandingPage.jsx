@@ -47,10 +47,10 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
 
       {/* --- HEADER NAVIGATION --- */}
       <header 
-        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
-            isScrolled 
-              ? (isDark ? 'bg-slate-900/80 backdrop-blur-md shadow-sm py-3 border-b border-slate-800' : 'bg-white/80 backdrop-blur-md shadow-sm py-3') 
-              : 'bg-transparent py-5'
+        className={`fixed top-6 left-6 right-6 md:left-12 md:right-12 lg:left-20 lg:right-20 z-50 rounded-2xl transition-all duration-300 py-3 backdrop-blur-xl border shadow-xl ${
+            isDark 
+              ? 'bg-slate-900/60 border-white/10 shadow-black/20' 
+              : 'bg-white/60 border-white/40 shadow-slate-200/40'
         }`}
       >
         <div className="w-full px-6 md:px-12 lg:px-20 flex justify-between items-center">
@@ -98,8 +98,8 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
             variants={staggerContainer}
             className="text-left space-y-6 z-10"
           >
-            <motion.div variants={fadeInUp} className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-bold tracking-wider ${isDark ? 'bg-secondary-900/30 border-secondary-800 text-secondary-400' : 'bg-secondary-100 border-secondary-200 text-secondary-700'}`}>
-              <span className="h-2 w-2 rounded-full bg-secondary-500 animate-pulse"></span>
+            <motion.div variants={fadeInUp} className={`inline-flex items-center gap-2 px-4 py-1.5 rounded-full border text-xs font-bold tracking-wider mb-2 backdrop-blur-md shadow-lg ${isDark ? 'bg-white/5 border-white/10 text-secondary-400 shadow-black/10' : 'bg-white/40 border-white/60 text-secondary-700 shadow-secondary-500/10'}`}>
+              <span className="h-2 w-2 rounded-full bg-secondary-500 animate-pulse shadow-[0_0_10px_rgba(234,179,8,0.5)]"></span>
               NEW VMGO ALIGNED SYSTEM
             </motion.div>
             

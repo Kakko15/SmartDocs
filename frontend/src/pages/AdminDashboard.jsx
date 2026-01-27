@@ -1,351 +1,380 @@
 import { useState, useEffect } from 'react';
 import toast from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import { getAdminRequests, approveRequest, rejectRequest } from '../services/api';
-import { ConfirmModal } from '../components/ui/Modal';
 import Announcements from '../components/features/Announcements';
 import RequestHistory from '../components/features/RequestHistory';
 import DocumentUpload from '../components/features/DocumentUpload';
 import RequestComments from '../components/features/RequestComments';
 
-export default function AdminDashboard({ adminId, adminRole }) {
-  const [requests, setRequests] = useState([]);
-  const [loading, setLoading] = useState(false);
-  const [rejectingId, setRejectingId] = useState(null);
-  const [rejectReason, setRejectReason] = useState('');
-  const [filter, setFilter] = useState('all');
-  const [approveConfirm, setApproveConfirm] = useState({ show: false, requestId: null });
+const THEME = {
+  bg: 'bg-[#020617]',
+  accent: 'bg-indigo-500',
+  accentGradient: 'from-indigo-500 to-violet-600',
+  surface: 'bg-slate-900/40',
+  glass: 'backdrop-blur-3xl bg-white/[0.02] border border-white/[0.05]',
+  glassHover: 'hover:bg-white/[0.05] hover:border-white/[0.1]',
+  text: {
+    primary: 'text-slate-100',
+    secondary: 'text-slate-400',
+    accent: 'text-indigo-400'
+  }
+};
 
-  useEffect(() => {
-    fetchRequests();
-  }, [adminRole]);
+const SPRING_TRANSITION = { type: "spring", stiffness: 300, damping: 30 };
 
-  const fetchRequests = async () => {
-    try {
-      const response = await getAdminRequests(adminRole);
-      if (response.success) {
-        setRequests(response.requests);
-      }
-    } catch (error) {
-      console.error('Error fetching requests:', error);
-    }
-  };
+const GlassCard = ({ children, className = "", onClick, delay = 0 }) => (
+  <motion.div
+    initial={{ opacity: 0, y: 20 }}
+    animate={{ opacity: 1, y: 0 }}
+    transition={{ ...SPRING_TRANSITION, delay }}
+    onClick={onClick}
+    className={`relative overflow-hidden rounded-[32px] ${THEME.glass} ${onClick ? 'cursor-pointer ' + THEME.glassHover : ''} shadow-2xl shadow-black/50 ${className}`}
+  >
+    <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.03] pointer-events-none mix-blend-overlay" />
+    <div className="absolute -top-[50%] -left-[50%] w-[200%] h-[200%] bg-gradient-to-br from-indigo-500/10 via-transparent to-transparent opacity-30 blur-3xl pointer-events-none" />
+    <div className="relative z-10 h-full">{children}</div>
+  </motion.div>
+);
 
-  const handleApprove = async (requestId) => {
-    setApproveConfirm({ show: true, requestId });
-  };
+const MetricPill = ({ label, value, trend, icon }) => (
+  <GlassCard className="flex flex-col justify-center p-6 min-h-[160px] group">
+    <div className="flex justify-between items-start mb-4">
+      <div className="p-3 rounded-2xl bg-white/5 text-white/80 group-hover:bg-indigo-500 group-hover:text-white transition-colors duration-300">
+        {icon}
+      </div>
+      {trend && (
+        <span className="text-xs font-bold text-emerald-400 bg-emerald-500/10 px-2 py-1 rounded-full border border-emerald-500/20">
+          {trend}
+        </span>
+      )}
+    </div>
+    <div className="text-4xl font-display font-bold text-white mb-1 tracking-tight group-hover:scale-105 transition-transform origin-left">
+      {value}
+    </div>
+    <div className="text-sm font-medium text-slate-500 uppercase tracking-widest">{label}</div>
+  </GlassCard>
+);
 
-  const confirmApprove = async () => {
-    const { requestId } = approveConfirm;
-    setApproveConfirm({ show: false, requestId: null });
-    
-    setLoading(true);
-    try {
-      const response = await approveRequest(requestId, adminId);
-      if (response.success) {
-        toast.success(response.message || 'Request approved!');
-        fetchRequests();
-      } else {
-        toast.error(response.error || 'Failed to approve request');
-      }
-    } catch (error) {
-      toast.error('Error approving request: ' + error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const handleReject = async (requestId) => {
-    if (!rejectReason.trim()) {
-      toast.error('Please provide a rejection reason');
-      return;
-    }
-
-    setLoading(true);
-    try {
-      const response = await rejectRequest(requestId, adminId, rejectReason);
-      if (response.success) {
-        toast.success('Request rejected');
-        setRejectingId(null);
-        setRejectReason('');
-        fetchRequests();
-      } else {
-        toast.error(response.error || 'Failed to reject request');
-      }
-    } catch (error) {
-      toast.error('Error rejecting request: ' + error.message);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const showNotification = (message, type) => {
-    // Deprecated - using toast directly now
-    if (type === 'success') {
-      toast.success(message);
-    } else {
-      toast.error(message);
-    }
-  };
-
-  const getStageName = () => {
-    return adminRole.replace('_admin', '').toUpperCase();
-  };
-
-  const getStageIcon = () => {
-    const icons = {
-      library_admin: (
-        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M9 4.804A7.968 7.968 0 005.5 4c-1.255 0-2.443.29-3.5.804v10A7.969 7.969 0 015.5 14c1.669 0 3.218.51 4.5 1.385A7.962 7.962 0 0114.5 14c1.255 0 2.443.29 3.5.804v-10A7.968 7.968 0 0014.5 4c-1.255 0-2.443.29-3.5.804V12a1 1 0 11-2 0V4.804z" />
-        </svg>
-      ),
-      cashier_admin: (
-        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-          <path d="M8.433 7.418c.155-.103.346-.196.567-.267v1.698a2.305 2.305 0 01-.567-.267C8.07 8.34 8 8.114 8 8c0-.114.07-.34.433-.582zM11 12.849v-1.698c.22.071.412.164.567.267.364.243.433.468.433.582 0 .114-.07.34-.433.582a2.305 2.305 0 01-.567.267z" />
-          <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-13a1 1 0 10-2 0v.092a4.535 4.535 0 00-1.676.662C6.602 6.234 6 7.009 6 8c0 .99.602 1.765 1.324 2.246.48.32 1.054.545 1.676.662v1.941c-.391-.127-.68-.317-.843-.504a1 1 0 10-1.51 1.31c.562.649 1.413 1.076 2.353 1.253V15a1 1 0 102 0v-.092a4.535 4.535 0 001.676-.662C13.398 13.766 14 12.991 14 12c0-.99-.602-1.765-1.324-2.246A4.535 4.535 0 0011 9.092V7.151c.391.127.68.317.843.504a1 1 0 101.511-1.31c-.563-.649-1.413-1.076-2.354-1.253V5z" clipRule="evenodd" />
-        </svg>
-      ),
-      registrar_admin: (
-        <svg className="w-8 h-8" fill="currentColor" viewBox="0 0 20 20">
-          <path fillRule="evenodd" d="M6 2a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V7.414A2 2 0 0015.414 6L12 2.586A2 2 0 0010.586 2H6zm5 6a1 1 0 10-2 0v3.586l-1.293-1.293a1 1 0 10-1.414 1.414l3 3a1 1 0 001.414 0l3-3a1 1 0 00-1.414-1.414L11 11.586V8z" clipRule="evenodd" />
-        </svg>
-      )
-    };
-    return icons[adminRole] || icons.library_admin;
+const ActionButton = ({ onClick, variant = 'primary', children, icon, isLoading }) => {
+  const baseClass = "relative h-12 px-6 rounded-full font-bold text-sm tracking-wide flex items-center justify-center gap-2 transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden";
+  const variants = {
+    primary: `bg-gradient-to-r ${THEME.accentGradient} text-white shadow-lg shadow-indigo-500/25 hover:shadow-indigo-500/40 hover:brightness-110`,
+    danger: "bg-red-500/10 text-red-400 border border-red-500/20 hover:bg-red-500 hover:text-white hover:border-red-500",
+    ghost: "bg-white/5 text-white/60 hover:text-white hover:bg-white/10"
   };
 
   return (
-    <div className="space-y-6">
-      {/* Announcements */}
-      <Announcements userRole={adminRole} />
+    <button onClick={onClick} disabled={isLoading} className={`${baseClass} ${variants[variant]}`}>
+      {isLoading ? (
+        <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" /></svg>
+      ) : (
+        <>
+          {icon}
+          {children}
+        </>
+      )}
+    </button>
+  );
+};
 
-      {/* Admin Header Card */}
-      <div className="card bg-gradient-to-r from-blue-500 to-indigo-600 text-white">
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-4">
-            <div className="w-16 h-16 bg-white bg-opacity-20 rounded-xl flex items-center justify-center">
-              {getStageIcon()}
-            </div>
-            <div>
-              <h2 className="text-2xl font-bold mb-1">{getStageName()} Admin Dashboard</h2>
-              <p className="text-blue-100">Manage requests at {getStageName()} stage</p>
+export default function AdminDashboard({ adminId, adminRole, onSignOut }) {
+  const [requests, setRequests] = useState([]);
+  const [selectedRequest, setSelectedRequest] = useState(null);
+  const [viewMode, setViewMode] = useState('queue'); 
+  const [isLoading, setIsLoading] = useState(false);
+  const [actionLoading, setActionLoading] = useState(false);
+  const [rejectReason, setRejectReason] = useState('');
+
+  useEffect(() => {
+    loadData();
+  }, [adminRole]);
+
+  const loadData = async () => {
+    setIsLoading(true);
+    try {
+      const res = await getAdminRequests(adminRole);
+      if (res.success) setRequests(res.requests);
+    } catch (err) {
+      toast.error("Sync failed");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const processAction = async (action, id) => {
+    setActionLoading(true);
+    const toastId = toast.loading('Processing transaction...');
+    try {
+      let res;
+      if (action === 'approve') {
+        res = await approveRequest(id, adminId);
+      } else {
+        if (!rejectReason) throw new Error("Reason required");
+        res = await rejectRequest(id, adminId, rejectReason);
+      }
+
+      if (res.success) {
+        toast.success(action === 'approve' ? 'Transaction Approved' : 'Request Rejected', { id: toastId });
+        setRequests(prev => prev.filter(r => r.id !== id));
+        setSelectedRequest(null);
+        setRejectReason('');
+      } else {
+        throw new Error(res.error || 'Operation failed');
+      }
+    } catch (err) {
+      toast.error(err.message, { id: toastId });
+    } finally {
+      setActionLoading(false);
+    }
+  };
+
+  const renderQueueItem = (req, idx) => (
+    <motion.div
+      layoutId={req.id}
+      initial={{ opacity: 0, x: -20 }}
+      animate={{ opacity: 1, x: 0 }}
+      transition={{ delay: idx * 0.05 }}
+      onClick={() => setSelectedRequest(req)}
+      className="group relative p-6 rounded-3xl bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.08] hover:border-white/20 transition-all cursor-pointer mb-4"
+    >
+      <div className="flex items-center justify-between">
+        <div className="flex items-center gap-5">
+          <div className={`w-14 h-14 rounded-2xl ${THEME.accent} flex items-center justify-center text-xl font-bold text-white shadow-lg shadow-indigo-500/20 group-hover:scale-110 transition-transform`}>
+            {req.profiles.first_name?.[0]}
+          </div>
+          <div>
+            <h3 className="text-lg font-bold text-white leading-tight group-hover:text-indigo-300 transition-colors">
+              {req.profiles.full_name}
+            </h3>
+            <div className="flex items-center gap-2 mt-1">
+              <span className="px-2 py-0.5 rounded-md bg-white/10 text-[10px] font-bold text-slate-300 uppercase tracking-wider">
+                {req.profiles.student_number}
+              </span>
+              <span className="text-xs text-slate-500">
+                {new Date(req.created_at).toLocaleDateString()}
+              </span>
             </div>
           </div>
-          <div className="hidden sm:block text-right">
-            <div className="text-3xl font-bold">{requests.length}</div>
-            <div className="text-sm text-blue-100">Pending Requests</div>
+        </div>
+        
+        <div className="flex items-center gap-6">
+          <div className="text-right hidden sm:block">
+            <div className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-0.5">Payment Type</div>
+            <div className="text-sm font-medium text-white">{req.document_types.name}</div>
+          </div>
+          <div className="w-10 h-10 rounded-full border border-white/10 flex items-center justify-center text-white/40 group-hover:bg-white group-hover:text-black transition-all">
+            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
           </div>
         </div>
       </div>
+    </motion.div>
+  );
 
-      {/* Stats Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="card bg-gradient-to-br from-green-50 to-emerald-50 border-green-200">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-green-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Ready to Review</p>
-              <p className="text-2xl font-bold text-gray-900">{requests.length}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card bg-gradient-to-br from-blue-50 to-indigo-50 border-blue-200">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-blue-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M9 2a1 1 0 000 2h2a1 1 0 100-2H9z" />
-                <path fillRule="evenodd" d="M4 5a2 2 0 012-2 3 3 0 003 3h2a3 3 0 003-3 2 2 0 012 2v11a2 2 0 01-2 2H6a2 2 0 01-2-2V5zm3 4a1 1 0 000 2h.01a1 1 0 100-2H7zm3 0a1 1 0 000 2h3a1 1 0 100-2h-3zm-3 4a1 1 0 100 2h.01a1 1 0 100-2H7zm3 0a1 1 0 100 2h3a1 1 0 100-2h-3z" clipRule="evenodd" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Your Stage</p>
-              <p className="text-2xl font-bold text-gray-900 capitalize">{getStageName()}</p>
-            </div>
-          </div>
-        </div>
-
-        <div className="card bg-gradient-to-br from-purple-50 to-pink-50 border-purple-200">
-          <div className="flex items-center gap-3">
-            <div className="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center">
-              <svg className="w-6 h-6 text-white" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M2 10a8 8 0 018-8v8h8a8 8 0 11-16 0z" />
-                <path d="M12 2.252A8.014 8.014 0 0117.748 8H12V2.252z" />
-              </svg>
-            </div>
-            <div>
-              <p className="text-sm text-gray-600">Quick Actions</p>
-              <p className="text-2xl font-bold text-gray-900">Active</p>
-            </div>
-          </div>
-        </div>
+  return (
+    <div className={`min-h-screen ${THEME.bg} text-slate-200 font-sans selection:bg-indigo-500/30 overflow-hidden`}>
+      
+      <div className="fixed inset-0 z-0">
+        <div className="absolute top-0 left-1/4 w-[500px] h-[500px] bg-indigo-600/20 rounded-full blur-[120px] animate-pulse" />
+        <div className="absolute bottom-0 right-1/4 w-[600px] h-[600px] bg-violet-600/10 rounded-full blur-[120px]" />
+        <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-[0.02]" />
       </div>
 
-      {/* Requests Queue */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-2xl font-bold text-gray-900">Request Queue</h3>
-          <button 
-            onClick={fetchRequests}
-            className="btn-secondary text-sm flex items-center gap-2"
-          >
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
-            </svg>
-            Refresh
-          </button>
-        </div>
-
-        {requests.length === 0 ? (
-          <div className="card text-center py-12">
-            <svg className="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-            </svg>
-            <p className="text-gray-500 text-lg font-medium">No pending requests</p>
-            <p className="text-gray-400 text-sm mt-2">All caught up! Check back later for new requests.</p>
-          </div>
-        ) : (
-          <div className="grid gap-4">
-            {requests.map(request => (
-              <div key={request.id} className="card hover:shadow-lg transition-all">
-                {/* Request Header */}
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex-1">
-                    <div className="flex items-center gap-3 mb-2">
-                      <h4 className="text-lg font-semibold text-gray-900">{request.document_types.name}</h4>
-                      <span className="badge badge-pending">
-                        {request.current_status.replace('_', ' ').toUpperCase()}
-                      </span>
-                    </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm text-gray-600">
-                      <div className="flex items-center gap-2">
-                        <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clipRule="evenodd" />
-                        </svg>
-                        <span className="font-medium">{request.profiles.full_name}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clipRule="evenodd" />
-                        </svg>
-                        <span>{new Date(request.created_at).toLocaleDateString('en-US', { 
-                          month: 'short', 
-                          day: 'numeric', 
-                          year: 'numeric',
-                          hour: '2-digit',
-                          minute: '2-digit'
-                        })}</span>
-                      </div>
-                      <div className="flex items-center gap-2">
-                        <svg className="w-4 h-4 text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                          <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1.323l3.954 1.582 1.599-.8a1 1 0 01.894 1.79l-1.233.616 1.738 5.42a1 1 0 01-.285 1.05A3.989 3.989 0 0115 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.715-5.349L11 6.477V16h2a1 1 0 110 2H7a1 1 0 110-2h2V6.477L6.237 7.582l1.715 5.349a1 1 0 01-.285 1.05A3.989 3.989 0 015 15a3.989 3.989 0 01-2.667-1.019 1 1 0 01-.285-1.05l1.738-5.42-1.233-.617a1 1 0 01.894-1.788l1.599.799L9 4.323V3a1 1 0 011-1z" clipRule="evenodd" />
-                        </svg>
-                        <span>{request.profiles.student_number}</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Action Buttons */}
-                {rejectingId !== request.id ? (
-                  <div className="flex gap-3 pt-4 border-t border-gray-200">
-                    <button 
-                      onClick={() => handleApprove(request.id)}
-                      disabled={loading}
-                      className="btn-primary flex-1 sm:flex-none flex items-center justify-center gap-2"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clipRule="evenodd" />
-                      </svg>
-                      Approve
-                    </button>
-                    <button 
-                      onClick={() => setRejectingId(request.id)}
-                      disabled={loading}
-                      className="btn-danger flex-1 sm:flex-none flex items-center justify-center gap-2"
-                    >
-                      <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                        <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                      </svg>
-                      Reject
-                    </button>
-                  </div>
-                ) : (
-                  <div className="pt-4 border-t border-gray-200 space-y-3 animate-slide-up">
-                    <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
-                      <label className="block text-sm font-medium text-gray-900 mb-2">
-                        Rejection Reason <span className="text-red-500">*</span>
-                      </label>
-                      <textarea 
-                        value={rejectReason}
-                        onChange={(e) => setRejectReason(e.target.value)}
-                        placeholder="Please explain why this request is being rejected..."
-                        className="input-field min-h-[100px] resize-none"
-                        required
-                      />
-                    </div>
-                    <div className="flex gap-3">
-                      <button 
-                        onClick={() => handleReject(request.id)}
-                        disabled={loading || !rejectReason.trim()}
-                        className="btn-danger flex-1 sm:flex-none"
-                      >
-                        Confirm Rejection
-                      </button>
-                      <button 
-                        onClick={() => {
-                          setRejectingId(null);
-                          setRejectReason('');
-                        }}
-                        className="btn-secondary flex-1 sm:flex-none"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  </div>
-                )}
-
-                {/* Document Upload - Admins can also upload */}
-                <div className="mt-4">
-                  <DocumentUpload
-                    requestId={request.id}
-                    userId={adminId}
-                    isOwner={false}
-                    isAdmin={true}
-                  />
-                </div>
-
-                {/* Comments Section */}
-                <div className="mt-4">
-                  <RequestComments
-                    requestId={request.id}
-                    userId={adminId}
-                    userRole={adminRole}
-                  />
-                </div>
+      <div className="relative z-10 max-w-[1800px] mx-auto p-6 lg:p-10 h-screen flex flex-col">
+        
+        <header className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-6">
+            <div className="w-16 h-16 rounded-[20px] bg-gradient-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur-xl flex items-center justify-center shadow-2xl">
+              <span className="font-display font-bold text-2xl text-white tracking-tighter">SD</span>
+            </div>
+            <div>
+              <h1 className="text-4xl font-display font-medium text-white tracking-tight">
+                Cashier<span className="text-white/30">Console</span>
+              </h1>
+              <div className="flex items-center gap-2 mt-1">
+                <span className="relative flex h-2 w-2">
+                  <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                  <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                </span>
+                <span className="text-xs font-bold text-emerald-500 uppercase tracking-widest">System Online</span>
               </div>
-            ))}
+            </div>
           </div>
-        )}
+
+          <div className="flex items-center gap-4">
+            <div className="hidden md:flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md">
+              <span className="w-2 h-2 rounded-full bg-slate-400"></span>
+              <span className="text-sm font-medium text-slate-300">{requests.length} Active Requests</span>
+            </div>
+            <button onClick={onSignOut} className="h-12 w-12 rounded-full bg-red-500/10 hover:bg-red-500 text-red-500 hover:text-white border border-red-500/20 flex items-center justify-center transition-all duration-300">
+              <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" /></svg>
+            </button>
+          </div>
+        </header>
+
+        <div className="flex-1 grid grid-cols-1 lg:grid-cols-12 gap-8 min-h-0">
+          
+          <div className="lg:col-span-8 flex flex-col gap-8 min-h-0">
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4 shrink-0">
+              <MetricPill 
+                label="Total Revenue" 
+                value="₱24,500" 
+                trend="+12%" 
+                icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+              />
+              <MetricPill 
+                label="Pending Payments" 
+                value={requests.length} 
+                icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+              />
+              <MetricPill 
+                label="Processed Today" 
+                value="142" 
+                icon={<svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+              />
+            </div>
+
+            <GlassCard className="flex-1 flex flex-col min-h-0">
+              <div className="flex items-center gap-6 p-6 border-b border-white/5">
+                <button 
+                  onClick={() => setViewMode('queue')}
+                  className={`text-sm font-bold uppercase tracking-widest transition-colors ${viewMode === 'queue' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                  Transaction Queue
+                </button>
+                <button 
+                  onClick={() => setViewMode('history')}
+                  className={`text-sm font-bold uppercase tracking-widest transition-colors ${viewMode === 'history' ? 'text-white' : 'text-slate-500 hover:text-slate-300'}`}
+                >
+                  History Log
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto p-6 custom-scrollbar">
+                <AnimatePresence mode="wait">
+                  {viewMode === 'queue' ? (
+                    requests.length === 0 ? (
+                      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="h-full flex flex-col items-center justify-center text-slate-500">
+                         <div className="w-20 h-20 rounded-full bg-white/5 flex items-center justify-center mb-4">
+                            <svg className="w-8 h-8 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" /></svg>
+                         </div>
+                         <p>All payments processed</p>
+                      </motion.div>
+                    ) : (
+                      requests.map((req, i) => renderQueueItem(req, i))
+                    )
+                  ) : (
+                    <RequestHistory isAdmin={true} />
+                  )}
+                </AnimatePresence>
+              </div>
+            </GlassCard>
+          </div>
+
+          <div className="lg:col-span-4 flex flex-col gap-8 min-h-0">
+            <GlassCard className="flex-1 flex flex-col relative">
+               {!selectedRequest ? (
+                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center p-8">
+                    <div className="w-32 h-32 rounded-full bg-gradient-to-tr from-white/5 to-transparent border border-white/5 flex items-center justify-center mb-6 animate-float">
+                       <svg className="w-12 h-12 text-indigo-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 9V7a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2m2 4h10a2 2 0 002-2v-6a2 2 0 00-2-2H9a2 2 0 00-2 2v6a2 2 0 002 2zm7-5a2 2 0 11-4 0 2 2 0 014 0z" /></svg>
+                    </div>
+                    <h3 className="text-xl font-display font-medium text-white mb-2">Transaction Details</h3>
+                    <p className="text-slate-400 text-sm leading-relaxed">Select a pending request from the queue to view documents, process payments, and approve clearance.</p>
+                 </div>
+               ) : (
+                 <motion.div 
+                   key={selectedRequest.id}
+                   initial={{ opacity: 0, scale: 0.95 }}
+                   animate={{ opacity: 1, scale: 1 }}
+                   className="flex flex-col h-full"
+                 >
+                    <div className="p-8 border-b border-white/5 bg-gradient-to-b from-indigo-500/10 to-transparent">
+                       <div className="flex justify-between items-start mb-6">
+                          <div>
+                             <h2 className="text-2xl font-display font-bold text-white">{selectedRequest.profiles.full_name}</h2>
+                             <p className="text-indigo-300 font-medium">{selectedRequest.profiles.student_number}</p>
+                          </div>
+                          <button onClick={() => setSelectedRequest(null)} className="p-2 hover:bg-white/10 rounded-full transition-colors">
+                             <svg className="w-5 h-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                          </button>
+                       </div>
+                       
+                       <div className="grid grid-cols-2 gap-4">
+                          <div className="p-4 rounded-2xl bg-black/20 border border-white/5">
+                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Document</p>
+                             <p className="text-sm font-medium text-white">{selectedRequest.document_types.name}</p>
+                          </div>
+                          <div className="p-4 rounded-2xl bg-black/20 border border-white/5">
+                             <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest mb-1">Amount Due</p>
+                             <p className="text-sm font-bold text-emerald-400">₱150.00</p>
+                          </div>
+                       </div>
+                    </div>
+
+                    <div className="flex-1 overflow-y-auto p-8 space-y-8 custom-scrollbar">
+                       <div>
+                          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                             <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> Proof of Payment
+                          </h4>
+                          <DocumentUpload requestId={selectedRequest.id} userId={adminId} isAdmin={true} />
+                       </div>
+                       
+                       <div>
+                          <h4 className="text-xs font-bold text-slate-500 uppercase tracking-widest mb-4 flex items-center gap-2">
+                             <span className="w-1.5 h-1.5 rounded-full bg-indigo-500"></span> Communication
+                          </h4>
+                          <RequestComments requestId={selectedRequest.id} userId={adminId} />
+                       </div>
+                    </div>
+
+                    <div className="p-6 border-t border-white/5 bg-black/20 backdrop-blur-xl">
+                       <div className="space-y-4">
+                          <ActionButton 
+                             variant="primary" 
+                             onClick={() => processAction('approve', selectedRequest.id)} 
+                             isLoading={actionLoading}
+                             icon={<svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>}
+                          >
+                             Confirm Payment & Approve
+                          </ActionButton>
+
+                          <div className="flex gap-2">
+                             <div className="flex-1 relative">
+                                <input 
+                                   type="text" 
+                                   placeholder="Rejection Reason..." 
+                                   className="w-full h-12 px-4 rounded-full bg-white/5 border border-white/10 text-sm text-white focus:outline-none focus:border-red-500/50 transition-colors"
+                                   value={rejectReason}
+                                   onChange={(e) => setRejectReason(e.target.value)}
+                                />
+                             </div>
+                             <ActionButton 
+                                variant="danger" 
+                                onClick={() => processAction('reject', selectedRequest.id)}
+                                isLoading={actionLoading}
+                             >
+                                Reject
+                             </ActionButton>
+                          </div>
+                       </div>
+                    </div>
+                 </motion.div>
+               )}
+            </GlassCard>
+
+            <GlassCard className="h-[250px] p-6 flex flex-col">
+               <div className="flex items-center gap-2 mb-4">
+                  <span className="w-2 h-2 rounded-full bg-orange-400 animate-pulse"></span>
+                  <h3 className="font-bold text-sm text-white uppercase tracking-widest">Live Updates</h3>
+               </div>
+               <div className="flex-1 overflow-y-auto custom-scrollbar">
+                  <Announcements userRole={adminRole} />
+               </div>
+            </GlassCard>
+          </div>
+
+        </div>
       </div>
-
-      {/* Request History - Shows all requests for admins */}
-      <RequestHistory isAdmin={true} />
-
-      {/* Approve Confirmation Modal */}
-      <ConfirmModal
-        isOpen={approveConfirm.show}
-        onClose={() => setApproveConfirm({ show: false, requestId: null })}
-        onConfirm={confirmApprove}
-        title="Approve Request"
-        message="Are you sure you want to approve this request? It will move to the next stage."
-        confirmText="Approve"
-        cancelText="Cancel"
-        type="info"
-      />
     </div>
   );
 }
