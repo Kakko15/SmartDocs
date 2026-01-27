@@ -46,7 +46,7 @@ export default function LoginForm({ onSwitchMode, isDark }) {
   return (
     <form onSubmit={handleSignIn} className="space-y-6">
        <div>
-        <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Email</label>
+        <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Email <span className="text-red-500">*</span></label>
         <input 
             type="email" 
             value={email} 
@@ -73,7 +73,7 @@ export default function LoginForm({ onSwitchMode, isDark }) {
        
        <div>
         <div className="flex items-center justify-between mb-1.5 ml-1">
-          <label className={`block text-sm font-bold ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Password</label>
+          <label className={`block text-sm font-bold ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Password <span className="text-red-500">*</span></label>
           <button type="button" onClick={() => toast('Feature coming soon!')} className={`text-sm font-semibold transition-colors ${isDark ? 'text-green-400 hover:text-green-300' : 'text-green-600 hover:text-green-700'}`}>
             Forgot password?
           </button>
