@@ -6,7 +6,15 @@ import Particles from "../../components/visuals/Particles";
 import logo from "../../assets/logo.png";
 
 export default function AuthPage({ onBackToHome, isDark }) {
-  const [isSignUp, setIsSignUp] = useState(false);
+  const [isSignUp, setIsSignUp] = useState(() => {
+    // Persist auth mode in sessionStorage so refresh keeps you on the same form
+    return sessionStorage.getItem('authMode') === 'signup';
+  });
+
+  // Save auth mode to sessionStorage whenever it changes
+  useEffect(() => {
+    sessionStorage.setItem('authMode', isSignUp ? 'signup' : 'login');
+  }, [isSignUp]);
 
   useEffect(() => {
     document.title = isSignUp ? "SmartDocs | Signup" : "SmartDocs | Login";

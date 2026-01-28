@@ -8,13 +8,102 @@ import SpotlightBorder from '../ui/SpotlightBorder';
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
+const COURSE_OPTIONS = [
+  {
+    label: "Agriculture, Forestry & Environment",
+    options: [
+      { value: "Bachelor of Science in Agriculture", label: "BS Ag / BSA: Bachelor of Science in Agriculture" },
+      { value: "Bachelor of Science in Animal Husbandry", label: "BSAH: Bachelor of Science in Animal Husbandry" },
+      { value: "Bachelor of Science in Agri Business", label: "BSAB: Bachelor of Science in Agri Business" },
+      { value: "Bachelor of Science in Forestry", label: "BSF: Bachelor of Science in Forestry" },
+      { value: "Bachelor of Science Environmental Science", label: "BS Env Sci: Bachelor of Science Environmental Science" },
+      { value: "Bachelor of Science in Fisheries and Aquatic Sciences", label: "BSFAS: Bachelor of Science in Fisheries and Aquatic Sciences" },
+      { value: "Diploma in Agricultural Technology", label: "DAT: Diploma in Agricultural Technology" },
+      { value: "Diploma in Agricultural Sciences", label: "DAS: Diploma in Agricultural Sciences" }
+    ]
+  },
+  {
+    label: "Engineering & Technology",
+    options: [
+      { value: "Bachelor of Science in Agricultural and Biosystems Engineering", label: "BSABE: Bachelor of Science in Agricultural and Biosystems Engineering" },
+      { value: "Bachelor of Science in Civil Engineering", label: "BSCE: Bachelor of Science in Civil Engineering" },
+      { value: "Bachelor of Science in Computer Science", label: "BSCS: Bachelor of Science in Computer Science" },
+      { value: "Bachelor of Science in Information Technology", label: "BSIT: Bachelor of Science in Information Technology" },
+      { value: "Bachelor of Science in Information Systems", label: "BSIS: Bachelor of Science in Information Systems" },
+      { value: "Bachelor of Science in Data Science and Analytics", label: "BSDSA: Bachelor of Science in Data Science and Analytics" },
+      { value: "Bachelor of Technology and Livelihood Education - Home Economics", label: "BTLEd-HE: Bachelor of Technology and Livelihood Education - Home Economics" },
+      { value: "Bachelor of Technology and Livelihood Education - Information and Communication Technology", label: "BTLEd-ICT: Bachelor of Technology and Livelihood Education - Information and Communication Technology" }
+    ]
+  },
+  {
+    label: "Health & Medical Sciences",
+    options: [
+      { value: "Doctor of Veterinary Medicine", label: "DVM: Doctor of Veterinary Medicine" },
+      { value: "Bachelor of Science in Nursing", label: "BSN: Bachelor of Science in Nursing" }
+    ]
+  },
+  {
+    label: "Business & Public Administration",
+    options: [
+      { value: "Bachelor of Science in Accountancy", label: "BSA: Bachelor of Science in Accountancy" },
+      { value: "Bachelor of Science in Management Accounting", label: "BSMA: Bachelor of Science in Management Accounting" },
+      { value: "Bachelor of Science in Business Administration (Human Resource Management)", label: "BSBA-HRM: Bachelor of Science in Business Administration (Human Resource Management)" },
+      { value: "Bachelor of Science in Business Administration (Marketing Management)", label: "BSBA-MM: Bachelor of Science in Business Administration (Marketing Management)" },
+      { value: "Bachelor of Science in Entrepreneurship", label: "BS Entrep: Bachelor of Science in Entrepreneurship" },
+      { value: "Bachelor in Public Administration", label: "BPA: Bachelor in Public Administration" }
+    ]
+  },
+  {
+    label: "Education & Library Science",
+    options: [
+      { value: "Bachelor of Elementary Education", label: "BEEd: Bachelor of Elementary Education" },
+      { value: "Bachelor of Secondary Education (English)", label: "BSEd: Bachelor of Secondary Education (English)" },
+      { value: "Bachelor of Secondary Education (Filipino)", label: "BSEd: Bachelor of Secondary Education (Filipino)" },
+      { value: "Bachelor of Secondary Education (Mathematics)", label: "BSEd: Bachelor of Secondary Education (Mathematics)" },
+      { value: "Bachelor of Secondary Education (Social Studies)", label: "BSEd: Bachelor of Secondary Education (Social Studies)" },
+      { value: "Bachelor of Secondary Education (Library & Information Management)", label: "BSEd-LISM: Bachelor of Secondary Education (Library & Information Management)" },
+      { value: "Bachelor of Library and Information Science", label: "BLIS: Bachelor of Library and Information Science" },
+      { value: "Bachelor of Early Childhood Education", label: "BECEd: Bachelor of Early Childhood Education" },
+      { value: "Bachelor of Physical Education", label: "BPEd: Bachelor of Physical Education" }
+    ]
+  },
+  {
+    label: "Arts & Sciences",
+    options: [
+      { value: "Bachelor of Science in Biology", label: "BS Bio: Bachelor of Science in Biology" },
+      { value: "Bachelor of Science in Chemistry", label: "BS Chem: Bachelor of Science in Chemistry" },
+      { value: "Bachelor of Science in Mathematics", label: "BS Math: Bachelor of Science in Mathematics" },
+      { value: "Bachelor of Science in Psychology", label: "BS Psych: Bachelor of Science in Psychology" },
+      { value: "Bachelor of Arts in English Language Studies", label: "BA ELS: Bachelor of Arts in English Language Studies" },
+      { value: "Bachelor of Arts in Communication", label: "BA Comm: Bachelor of Arts in Communication" }
+    ]
+  },
+  {
+    label: "Criminal Justice & Tourism",
+    options: [
+      { value: "Bachelor of Science in Criminology", label: "BS Crim: Bachelor of Science in Criminology" },
+      { value: "Bachelor of Science in Law Enforcement Administration", label: "BSLEA: Bachelor of Science in Law Enforcement Administration" },
+      { value: "Bachelor of Science in Hospitality Management", label: "BSHM: Bachelor of Science in Hospitality Management" },
+      { value: "Bachelor of Science in Tourism Management", label: "BSTM: Bachelor of Science in Tourism Management" }
+    ]
+  }
+];
+
+const YEAR_LEVEL_OPTIONS = [
+  { value: '1st Year', label: '1st Year' },
+  { value: '2nd Year', label: '2nd Year' },
+  { value: '3rd Year', label: '3rd Year' },
+  { value: '4th Year', label: '4th Year' },
+  { value: '5th Year', label: '5th Year' },
+  { value: '6th Year', label: '6th Year' }
+];
+
 export default function SignupForm({ onSwitchMode, isDark }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [isPasswordFocused, setIsPasswordFocused] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   
@@ -23,7 +112,8 @@ export default function SignupForm({ onSwitchMode, isDark }) {
     lastName: '',
     role: 'student',
     studentNumber: '',
-    courseYear: ''
+    course: '',
+    yearLevel: ''
   });
 
   const recaptchaRef = useRef(null);
@@ -47,7 +137,8 @@ export default function SignupForm({ onSwitchMode, isDark }) {
         password: 'Password is required.',
         confirmPassword: 'Please confirm your password.',
         studentNumber: 'ID Number is required.',
-        courseYear: 'Course/Year is required.'
+        course: 'Course is required.',
+        yearLevel: 'Year Level is required.'
       };
       return labels[field];
     }
@@ -95,7 +186,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
           lastName: signUpData.lastName.trim(),
           role: signUpData.role,
           studentNumber: signUpData.role === 'student' ? signUpData.studentNumber : null,
-          courseYear: signUpData.role === 'student' ? signUpData.courseYear : null,
+          courseYear: signUpData.role === 'student' ? `${signUpData.course} - ${signUpData.yearLevel}` : null,
           recaptchaToken: recaptchaToken
         })
       });
@@ -109,7 +200,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
       setEmail('');
       setPassword('');
       setConfirmPassword('');
-      setSignUpData({ firstName: '', lastName: '', role: 'student', studentNumber: '', courseYear: '' });
+      setSignUpData({ firstName: '', lastName: '', role: 'student', studentNumber: '', course: '', yearLevel: '' });
       setRecaptchaToken(null);
       recaptchaRef.current?.reset();
       setTouched({});
@@ -228,8 +319,9 @@ export default function SignupForm({ onSwitchMode, isDark }) {
          </SpotlightBorder>
       </div>
 
-      {signUpData.role === 'student' && (
-         <div className="grid grid-cols-2 gap-4">
+{signUpData.role === 'student' && (
+        <div className="space-y-4">
+          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Given ID No. <span className="text-red-500">*</span></label>
               <SpotlightBorder isDark={isDark} error={getFieldError('studentNumber', signUpData.studentNumber)}>
@@ -256,20 +348,25 @@ export default function SignupForm({ onSwitchMode, isDark }) {
                 )}
               </AnimatePresence>
             </div>
-            <div>
-              <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Course/Year <span className="text-red-500">*</span></label>
-              <SpotlightBorder isDark={isDark} error={getFieldError('courseYear', signUpData.courseYear)}>
-                <input 
-                  type="text" 
-                  value={signUpData.courseYear} 
-                  onChange={(e) => setSignUpData({ ...signUpData, courseYear: e.target.value })} 
-                  onBlur={() => handleBlur('courseYear')}
-                  required 
-                  className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('courseYear', signUpData.courseYear) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
+            
+            <div className="relative z-30">
+              <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Year Level <span className="text-red-500">*</span></label>
+              <SpotlightBorder isDark={isDark} error={getFieldError('yearLevel', signUpData.yearLevel)}>
+                <CustomSelect
+                  label=""
+                  value={signUpData.yearLevel}
+                  onChange={(val) => {
+                    setSignUpData({ ...signUpData, yearLevel: val });
+                    handleBlur('yearLevel');
+                  }}
+                  isDark={isDark}
+                  options={YEAR_LEVEL_OPTIONS}
+                  error={getFieldError('yearLevel', signUpData.yearLevel)}
+                  placeholder="Select Year"
                 />
               </SpotlightBorder>
               <AnimatePresence>
-                {getFieldError('courseYear', signUpData.courseYear) && (
+                {getFieldError('yearLevel', signUpData.yearLevel) && (
                   <motion.p
                     initial={{ opacity: 0, y: -5, height: 0 }}
                     animate={{ opacity: 1, y: 0, height: 'auto' }}
@@ -277,12 +374,44 @@ export default function SignupForm({ onSwitchMode, isDark }) {
                     transition={{ duration: 0.2 }}
                     className="text-red-500 text-xs mt-1 ml-1 font-bold"
                   >
-                    {getFieldError('courseYear', signUpData.courseYear)}
+                    {getFieldError('yearLevel', signUpData.yearLevel)}
                   </motion.p>
                 )}
               </AnimatePresence>
             </div>
-         </div>
+          </div>
+
+          <div className="relative z-20">
+            <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Course <span className="text-red-500">*</span></label>
+            <SpotlightBorder isDark={isDark} error={getFieldError('course', signUpData.course)}>
+              <CustomSelect
+                label=""
+                value={signUpData.course}
+                onChange={(val) => {
+                  setSignUpData({ ...signUpData, course: val });
+                  handleBlur('course');
+                }}
+                isDark={isDark}
+                options={COURSE_OPTIONS}
+                error={getFieldError('course', signUpData.course)}
+                placeholder="Select Course"
+              />
+            </SpotlightBorder>
+            <AnimatePresence>
+              {getFieldError('course', signUpData.course) && (
+                <motion.p
+                  initial={{ opacity: 0, y: -5, height: 0 }}
+                  animate={{ opacity: 1, y: 0, height: 'auto' }}
+                  exit={{ opacity: 0, y: -5, height: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-red-500 text-xs mt-1 ml-1 font-bold"
+                >
+                  {getFieldError('course', signUpData.course)}
+                </motion.p>
+              )}
+            </AnimatePresence>
+          </div>
+        </div>
       )}
 
       <div>
@@ -317,10 +446,11 @@ export default function SignupForm({ onSwitchMode, isDark }) {
             </AnimatePresence>
           </div>
           <button
+            id="toggle-password-visibility"
             type="button"
             tabIndex={-1}
-            onClick={() => setShowPassword(!showPassword)}
-            className={`absolute right-4 top-1/2 -translate-y-1/2 focus:outline-none transition-colors ${isDark ? 'text-slate-500 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'}`}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowPassword(prev => !prev); }}
+            className={`absolute right-4 top-1/2 -translate-y-1/2 focus:outline-none transition-colors z-10 ${isDark ? 'text-slate-500 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'}`}
           >
             {showPassword ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
@@ -352,7 +482,7 @@ export default function SignupForm({ onSwitchMode, isDark }) {
         <div className="relative">
            <SpotlightBorder isDark={isDark} error={getFieldError('confirmPassword', confirmPassword, password)}>
              <input 
-              type={showConfirmPassword ? "text" : "password"} 
+              type={showPassword ? "text" : "password"} 
               value={confirmPassword} 
               onChange={(e) => setConfirmPassword(e.target.value)} 
               onBlur={() => handleBlur('confirmPassword')}
@@ -378,12 +508,13 @@ export default function SignupForm({ onSwitchMode, isDark }) {
             </AnimatePresence>
           </div>
            <button
+            id="toggle-confirm-password-visibility"
             type="button"
             tabIndex={-1}
-            onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-            className={`absolute right-4 top-1/2 -translate-y-1/2 focus:outline-none transition-colors ${isDark ? 'text-slate-500 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'}`}
+            onClick={(e) => { e.preventDefault(); e.stopPropagation(); setShowPassword(prev => !prev); }}
+            className={`absolute right-4 top-1/2 -translate-y-1/2 focus:outline-none transition-colors z-10 ${isDark ? 'text-slate-500 hover:text-slate-300' : 'text-gray-400 hover:text-gray-600'}`}
           >
-            {showConfirmPassword ? (
+            {showPassword ? (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21" /></svg>
             ) : (
               <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>

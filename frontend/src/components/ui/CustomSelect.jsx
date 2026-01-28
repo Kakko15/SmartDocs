@@ -1,11 +1,23 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
-export default function CustomSelect({ label, value, onChange, options, error, isDark }) {
+export default function CustomSelect({ label, value, onChange, options, error, isDark, placeholder }) {
   const [isOpen, setIsOpen] = useState(false);
   const containerRef = useRef(null);
 
-  const selectedLabel = options.find(opt => opt.value === value)?.label || value;
+  const findLabel = (opts, val) => {
+    for (const opt of opts) {
+      if (opt.options) {
+        const found = findLabel(opt.options, val);
+        if (found) return found;
+      } else if (opt.value === val) {
+        return opt.label;
+      }
+    }
+    return null;
+  };
+
+  const selectedLabel = findLabel(options, value) || value || placeholder;
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -53,30 +65,62 @@ export default function CustomSelect({ label, value, onChange, options, error, i
               ${isDark ? 'bg-slate-900/95 border-slate-700' : 'bg-white border-slate-200'}
             `}
           >
-            <div className="py-2 max-h-[200px] overflow-y-auto custom-scrollbar">
-              {options.map((option) => (
-                <div
-                  key={option.value}
-                  onClick={() => {
-                    onChange(option.value);
-                    setIsOpen(false);
-                  }}
-                  className={`
-                    px-5 py-3 text-sm font-bold cursor-pointer transition-all duration-200
-                    flex items-center justify-between
-                    ${option.value === value 
-                      ? (isDark ? 'bg-green-900/20 text-green-400' : 'bg-green-50 text-green-700')
-                      : (isDark ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-100' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900')
-                    }
-                  `}
-                >
-                  {option.label}
-                  {option.value === value && (
-                    <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                    </motion.svg>
-                  )}
-                </div>
+            <div className="py-2 max-h-[400px] overflow-y-auto custom-scrollbar">
+              {options.map((option, index) => (
+                option.options ? (
+                  <div key={index}>
+                    <div className={`px-5 py-2 text-xs font-bold uppercase tracking-wider ${isDark ? 'text-slate-500' : 'text-gray-400'}`}>
+                      {option.label}
+                    </div>
+                    {option.options.map((subOption) => (
+                      <div
+                        key={subOption.value}
+                        onClick={() => {
+                          onChange(subOption.value);
+                          setIsOpen(false);
+                        }}
+                        className={`
+                          px-5 py-3 text-sm font-bold cursor-pointer transition-all duration-200 pl-8
+                          flex items-center justify-between
+                          ${subOption.value === value 
+                            ? (isDark ? 'bg-green-900/20 text-green-400' : 'bg-green-50 text-green-700')
+                            : (isDark ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-100' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900')
+                          }
+                        `}
+                      >
+                        {subOption.label}
+                        {subOption.value === value && (
+                          <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                          </motion.svg>
+                        )}
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div
+                    key={option.value}
+                    onClick={() => {
+                      onChange(option.value);
+                      setIsOpen(false);
+                    }}
+                    className={`
+                      px-5 py-3 text-sm font-bold cursor-pointer transition-all duration-200
+                      flex items-center justify-between
+                      ${option.value === value 
+                        ? (isDark ? 'bg-green-900/20 text-green-400' : 'bg-green-50 text-green-700')
+                        : (isDark ? 'text-slate-400 hover:bg-slate-800 hover:text-slate-100' : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900')
+                      }
+                    `}
+                  >
+                    {option.label}
+                    {option.value === value && (
+                      <motion.svg initial={{ scale: 0 }} animate={{ scale: 1 }} className="w-4 h-4 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </motion.svg>
+                    )}
+                  </div>
+                )
               ))}
             </div>
           </motion.div>
