@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import toast from 'react-hot-toast';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ThemeToggle from '../components/ui/ThemeToggle';
 import logo from '../assets/logo.png';
+import isuLogo from '../assets/isu-logo.jpg';
 
 const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
   const { scrollY } = useScroll();
@@ -42,12 +44,12 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
 
 
   return (
-    <div className={`relative min-h-screen w-full font-sans transition-colors duration-500 overflow-hidden ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-[#f8fafc] text-slate-800'}`}>
+    <div id="home" className={`relative min-h-screen w-full font-sans transition-colors duration-500 overflow-hidden ${isDark ? 'bg-slate-950 text-slate-100' : 'bg-[#f8fafc] text-slate-800'}`}>
       
       <div className={`absolute inset-0 z-0 grid-bg pointer-events-none transition-opacity duration-500 ${isDark ? 'opacity-10' : 'opacity-40'}`} />
       
       <div className={`absolute top-0 right-0 w-[600px] h-[600px] rounded-full blur-[100px] -z-10 translate-x-1/3 -translate-y-1/3 transition-colors duration-500 ${isDark ? 'bg-primary-900/20' : 'bg-primary-100/50'}`} />
-      <div className={`absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] -z-10 -translate-x-1/3 translate-y-1/3 transition-colors duration-500 ${isDark ? 'bg-secondary-900/20' : 'bg-secondary-100/50'}`} />
+      <div className={`absolute bottom-0 left-0 w-[500px] h-[500px] rounded-full blur-[100px] -z-10 -translate-x-1/3 transition-colors duration-500 ${isDark ? 'bg-secondary-900/20' : 'bg-secondary-100/50'}`} />
 
       <header 
         className={`fixed top-6 left-6 right-6 md:left-12 md:right-12 lg:left-20 lg:right-20 z-50 rounded-2xl transition-all duration-300 py-3 backdrop-blur-xl border shadow-xl ${
@@ -57,7 +59,13 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
         }`}
       >
         <div className="w-full px-6 md:px-12 lg:px-20 flex justify-between items-center">
-          <div className="flex items-center gap-3">
+          <div 
+            onClick={() => {
+              history.pushState(null, '', window.location.pathname);
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} 
+            className="flex items-center gap-3 cursor-pointer"
+          >
             <img src={logo} alt="SmartDocs Logo" className="h-10 w-10 object-contain drop-shadow-md" />
             <div>
               <h1 className={`text-xl font-bold leading-none tracking-tight font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>SMART<span className="text-primary-600">DOCS</span></h1>
@@ -66,7 +74,7 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
           </div>
 
           <nav className={`hidden md:flex items-center gap-8 text-sm font-semibold tracking-wide ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
-            <a href="#" className="hover:text-primary-600 transition-colors">HOME</a>
+            <a href="#" onClick={(e) => { e.preventDefault(); history.pushState(null, '', window.location.pathname); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-primary-600 transition-colors">HOME</a>
             <a href="#features" className="hover:text-primary-600 transition-colors">FEATURES</a>
             <a href="#about" className="hover:text-primary-600 transition-colors">ABOUT ISUE</a>
             
@@ -200,7 +208,199 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
         </div>
       </main>
 
-      <footer className={`border-t pt-16 pb-8 transition-colors duration-500 ${isDark ? 'bg-slate-950 border-slate-900' : 'bg-white border-slate-200'}`}>
+      {/* --- FEATURES SECTION --- */}
+      <section id="features" className={`scroll-mt-32 py-24 relative overflow-hidden ${isDark ? 'bg-slate-900/50' : 'bg-white/50'}`}>
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-16"
+          >
+            <h2 className={`text-3xl md:text-5xl font-bold font-display mb-4 ${isDark ? 'text-white' : 'text-slate-900'}`}>
+              Why Choose <span className="text-primary-600">SmartDocs</span>?
+            </h2>
+            <p className={`text-lg max-w-2xl mx-auto ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>
+              Streamline your clearance process with our advanced digital solution designed for the modern academic environment.
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {[
+              {
+                title: "100% Paperless",
+                desc: "Eliminate physical forms and reduce campus waste. contribute to a greener environment while saving time.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>
+                ),
+                color: "bg-green-500"
+              },
+              {
+                title: "Real-time Tracking",
+                desc: "Monitor your clearance status instantly. Get notified when an office approves your request.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                ),
+                color: "bg-blue-500"
+              },
+              {
+                title: "Secure & Verified",
+                desc: "Digital signatures and QR code verification ensure authenticity for every document processed.",
+                icon: (
+                  <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
+                ),
+                color: "bg-purple-500"
+              }
+            ].map((feature, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className={`p-8 rounded-2xl border transition-all hover:-translate-y-1 hover:shadow-2xl ${isDark ? 'bg-slate-800/50 border-slate-700 hover:border-primary-500/50' : 'bg-white border-slate-200 hover:border-primary-200'}`}
+              >
+                <div className={`w-14 h-14 rounded-xl flex items-center justify-center text-white mb-6 shadow-lg ${feature.color}`}>
+                  {feature.icon}
+                </div>
+                <h3 className={`text-xl font-bold mb-3 ${isDark ? 'text-white' : 'text-slate-900'}`}>{feature.title}</h3>
+                <p className={`leading-relaxed ${isDark ? 'text-slate-400' : 'text-slate-600'}`}>{feature.desc}</p>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* --- ABOUT SECTION --- */}
+      <section id="about" className={`scroll-mt-32 py-32 relative overflow-hidden ${isDark ? 'bg-slate-950' : 'bg-slate-50'}`}>
+        {/* Background Decorations */}
+        <div className={`absolute inset-0 grid-bg opacity-30 pointer-events-none ${isDark ? 'opacity-20' : 'opacity-10'}`} />
+        <div className={`absolute top-0 right-0 w-[500px] h-[500px] bg-primary-500/20 rounded-full blur-[120px] -translate-y-1/2 translate-x-1/2`}></div>
+        <div className={`absolute bottom-0 left-0 w-[500px] h-[500px] bg-secondary-500/10 rounded-full blur-[120px] translate-y-1/2 -translate-x-1/2`}></div>
+
+        <div className="max-w-7xl mx-auto px-6 md:px-12 lg:px-20 relative z-10">
+          <div className="grid md:grid-cols-2 gap-16 items-center">
+            
+            <motion.div 
+               initial={{ opacity: 0, x: -50 }}
+               whileInView={{ opacity: 1, x: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.8 }}
+               className="relative"
+            >
+               <div className={`relative h-[500px] rounded-3xl overflow-hidden shadow-2xl transition-all duration-500 group ${isDark ? 'bg-slate-900 border border-slate-800' : 'bg-white border border-slate-200'}`}>
+                   {/* Gradient Overlay */}
+                   <div className="absolute inset-0 bg-gradient-to-br from-primary-500/10 via-transparent to-secondary-500/10 group-hover:opacity-100 transition-opacity duration-500"></div>
+                   
+                   {/* Abstract Tech Visual */}
+                   <div className="absolute inset-0 flex items-center justify-center">
+                      <div className="relative w-64 h-64">
+                         <div className={`absolute inset-0 rounded-full border-2 border-dashed animate-[spin_10s_linear_infinite] ${isDark ? 'border-slate-700' : 'border-slate-300'}`}></div>
+                         <div className={`absolute inset-4 rounded-full border-2 border-dashed animate-[spin_15s_linear_infinite_reverse] ${isDark ? 'border-primary-900' : 'border-primary-100'}`}></div>
+                         <div className="absolute inset-0 flex items-center justify-center">
+                            <motion.div 
+                              animate={{ y: [0, -10, 0] }}
+                              transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                              className={`w-32 h-32 rounded-2xl flex items-center justify-center backdrop-blur-xl border-2 shadow-2xl relative z-10 ${isDark ? 'bg-slate-800/80 border-slate-700' : 'bg-white/80 border-white'}`}
+                            >
+                               <img src={logo} alt="ISU Logo" className="w-20 h-20 object-contain drop-shadow-xl" />
+                               
+                               {/* Floating badge */}
+                               <div className="absolute -top-4 -right-4 bg-green-500 text-white text-[10px] font-bold px-3 py-1 rounded-full shadow-lg flex items-center gap-1">
+                                 <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={3} d="M5 13l4 4L19 7" /></svg>
+                                 VERIFIED
+                               </div>
+                            </motion.div>
+                         </div>
+                      </div>
+                   </div>
+
+                   {/* Stats Cards */}
+                   <motion.div 
+                     initial={{ opacity: 0, y: 20 }}
+                     whileInView={{ opacity: 1, y: 0 }}
+                     transition={{ delay: 0.3 }}
+                     className={`absolute bottom-8 left-8 right-8 p-4 rounded-xl border backdrop-blur-md ${isDark ? 'bg-slate-800/60 border-slate-700' : 'bg-white/60 border-white/50'}`}
+                   >
+                      <div className="flex justify-between items-center">
+                        <div>
+                          <p className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>TOTAL PROCESSED</p>
+                          <p className={`text-2xl font-bold font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>15,402+</p>
+                        </div>
+                        <div className={`h-10 w-px ${isDark ? 'bg-slate-700' : 'bg-slate-300'}`}></div>
+                        <div>
+                          <p className={`text-xs font-bold ${isDark ? 'text-slate-400' : 'text-slate-500'}`}>EFFICIENCY</p>
+                          <p className="text-2xl font-bold font-display text-green-500">99.9%</p>
+                        </div>
+                      </div>
+                   </motion.div>
+               </div>
+               
+               {/* Decorative background element behind card */}
+               <div className={`absolute -inset-4 -z-10 bg-gradient-to-r from-primary-500 to-secondary-500 rounded-[2.5rem] opacity-20 blur-2xl transition-opacity duration-500 ${isDark ? 'opacity-20' : 'opacity-10'}`}></div>
+            </motion.div>
+
+            <motion.div 
+               initial={{ opacity: 0, x: 50 }}
+               whileInView={{ opacity: 1, x: 0 }}
+               viewport={{ once: true }}
+               transition={{ duration: 0.8 }}
+            >
+              <div className="inline-flex items-center gap-2 mb-6">
+                <span className="w-8 h-[2px] bg-primary-500"></span>
+                <span className={`text-xs font-bold tracking-[0.2em] uppercase ${isDark ? 'text-primary-400' : 'text-primary-600'}`}>About The Institution</span>
+              </div>
+              
+              <h2 className={`text-4xl md:text-5xl lg:text-6xl font-bold font-display mb-8 leading-tight ${isDark ? 'text-white' : 'text-slate-900'}`}>
+                Innovation Meets <br/> 
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-500 via-secondary-500 to-primary-500 bg-[length:200%_auto] animate-gradient">Academic Excellence</span>
+              </h2>
+              
+              <p className={`text-lg mb-6 leading-relaxed ${isDark ? 'text-slate-300' : 'text-slate-600'}`}>
+                Isabela State University - Echague Campus serves as the main campus of the university system. We are committed to delivering quality education while championing environmental sustainability through digital transformation.
+              </p>
+              
+              <p className={`text-lg mb-10 leading-relaxed border-l-4 pl-6 ${isDark ? 'text-slate-400 border-slate-800' : 'text-slate-600 border-primary-100'}`}>
+                <span className={`block font-bold mb-2 ${isDark ? 'text-white' : 'text-slate-900'}`}>Our Vision</span>
+                SmartDocs represents our pledge to a "Smart Green University" — reducing carbon footprints while increasing operational efficiency for thousands of students.
+              </p>
+              
+              <div className="flex flex-wrap gap-4">
+                <a 
+                  href="https://isu.edu.ph/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={`group px-8 py-4 rounded-full font-bold tracking-wider transition-all shadow-xl hover:shadow-2xl hover:-translate-y-1 flex items-center gap-3 ${isDark ? 'bg-white text-slate-900 hover:bg-slate-200' : 'bg-slate-900 text-white hover:bg-slate-800'}`}
+                >
+                  VISIT WEBSITE
+                  <svg className="w-5 h-5 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                </a>
+                
+                <button 
+                  onClick={() => {
+                     toast("Call us at: (078) 305 9013", {
+                        icon: '📞',
+                        style: {
+                           background: isDark ? '#1e293b' : '#fff',
+                           color: isDark ? '#fff' : '#333',
+                           fontWeight: 'bold',
+                           border: isDark ? '1px solid #334155' : '1px solid #e2e8f0'
+                        },
+                        duration: 4000
+                     });
+                  }}
+                  className={`px-8 py-4 rounded-full font-bold tracking-wider border-2 transition-all ${isDark ? 'border-slate-800 text-slate-300 hover:border-slate-600 hover:text-white' : 'border-slate-200 text-slate-600 hover:border-slate-400 hover:text-slate-900'}`}
+                >
+                  CONTACT US
+                </button>
+              </div>
+            </motion.div>
+
+          </div>
+        </div>
+      </section>
+
+      <footer className={`border-t pt-16 transition-colors duration-500 ${isDark ? 'bg-slate-950 border-slate-900' : 'bg-white border-slate-200'}`}>
         <div className="w-full px-6 md:px-12 lg:px-20">
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-2">
@@ -213,10 +413,35 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
                 Dedicated to providing efficient, transparent, and eco-friendly academic services.
               </p>
               <div className="flex gap-4">
-                {[1, 2, 3].map(i => (
-                  <div key={i} className={`w-8 h-8 rounded-full flex items-center justify-center transition-colors cursor-pointer text-slate-400 ${isDark ? 'bg-slate-900 hover:bg-slate-800' : 'bg-slate-100 hover:bg-primary-100 hover:text-primary-600'}`}>
-                    <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2C6.477 2 2 6.477 2 12c0 5.523 4.477 10 10 10s10-4.477 10-10c0-5.523-4.477-10-10-10z"/></svg>
-                  </div>
+                {[
+                  { 
+                    icon: (
+                      <svg className="w-full h-full" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z" />
+                      </svg>
+                    ), 
+                    label: "Facebook",
+                    link: "https://www.facebook.com/isabelastateuniversity",
+                    colorClass: "text-[#1877F2]"
+                  },
+                  { 
+                    icon: (
+                      <img src={isuLogo} alt="ISU" className="w-full h-full object-cover rounded-full" />
+                    ), 
+                    label: "Official Website",
+                    link: "https://isu.edu.ph/" 
+                  }
+                ].map((social, i) => (
+                  <a 
+                    key={i} 
+                    href={social.link}
+                    target={social.link !== '#' ? "_blank" : "_self"}
+                    rel="noopener noreferrer"
+                    className={`w-9 h-9 flex items-center justify-center transition-transform hover:scale-110 cursor-pointer rounded-full ${social.colorClass ? social.colorClass : 'text-slate-400'}`}
+                    aria-label={social.label}
+                  >
+                    {social.icon}
+                  </a>
                 ))}
               </div>
             </div>
@@ -239,6 +464,10 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
                    <span>San Fabian, Echague,<br/>Isabela 3309</span>
                 </li>
                 <li className="flex items-center gap-3">
+                   <svg className="w-5 h-5 text-primary-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" /></svg>
+                   <span>(078) 305 9013</span>
+                </li>
+                <li className="flex items-center gap-3">
                    <svg className="w-5 h-5 text-primary-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" /></svg>
                    <span>registrar@isu.edu.ph</span>
                 </li>
@@ -246,7 +475,7 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
             </div>
           </div>
 
-          <div className="border-t border-slate-100 pt-8 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-slate-400 tracking-wider">
+          <div className="border-t border-slate-100 pt-4 pb-4 flex flex-col md:flex-row justify-between items-center gap-4 text-xs font-bold text-slate-400 tracking-wider">
             <p>&copy; 2026 ISABELA STATE UNIVERSITY. ALL RIGHTS RESERVED.</p>
             <div className="flex gap-6">
               <a href="#" className="hover:text-slate-600">PRIVACY POLICY</a>

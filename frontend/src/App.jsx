@@ -166,7 +166,7 @@ function App() {
 
         {/* PHASE 2: LANDING PAGE */}
         {appMode === 'landing' && (
-          <motion.div key="landing" exit={{ opacity: 0, y: -100 }} className={`fixed inset-0 z-40 overflow-y-auto ${isDarkMode ? 'bg-slate-950' : 'bg-white'}`}>
+          <motion.div key="landing" exit={{ opacity: 0, y: -100 }} className={`relative z-40 ${isDarkMode ? 'bg-slate-950' : 'bg-white'}`}>
             <LandingPage onEnter={enterSystem} isDark={isDarkMode} toggleTheme={toggleTheme} />
           </motion.div>
         )}

@@ -1,20 +1,25 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@500;600;700;800&display=swap");
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 :root {
-  --isu-green: #16a34a; 
+  --isu-green: #16a34a;
   --isu-gold: #eab308;
+}
+
+html {
+  scroll-behavior: smooth;
 }
 
 body {
   margin: 0;
   background-color: #021205;
   color: #fff;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   overflow-x: hidden;
+  overflow-y: auto;
 }
 
 .spatial-glass {
@@ -22,22 +27,22 @@ body {
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 1);
-  box-shadow: 
+  box-shadow:
     0 20px 40px -10px rgba(22, 163, 74, 0.15),
     0 0 100px -20px rgba(22, 163, 74, 0.1),
-    0 0 0 1px rgba(0,0,0,0.03); 
+    0 0 0 1px rgba(0, 0, 0, 0.03);
   transform: translateZ(0);
   will-change: transform, opacity;
 }
 
 .spatial-glass-dark {
-  background: rgba(2, 6, 23, 0.7); 
+  background: rgba(2, 6, 23, 0.7);
   backdrop-filter: blur(40px) saturate(180%);
   -webkit-backdrop-filter: blur(40px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 
+  box-shadow:
     0 20px 40px -10px rgba(0, 0, 0, 0.5),
-    0 0 100px -20px rgba(22, 163, 74, 0.15), 
+    0 0 100px -20px rgba(22, 163, 74, 0.15),
     inset 0 1px 0 rgba(255, 255, 255, 0.05);
   transform: translateZ(0);
   will-change: transform, opacity;
@@ -45,23 +50,23 @@ body {
 
 .spatial-input-wrapper {
   position: relative;
-  background: #f8fafc; 
-  border: 1px solid #e2e8f0; 
-  border-radius: 16px; 
+  background: #f8fafc;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .spatial-input-wrapper:hover {
-  background: #f1f5f9; 
-  border-color: #cbd5e1; 
+  background: #f1f5f9;
+  border-color: #cbd5e1;
 }
 
 .spatial-input-wrapper:focus-within {
   background: #ffffff;
   border-color: var(--isu-green);
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(22, 163, 74, 0.1),
-    0 10px 20px -5px rgba(0, 0, 0, 0.05); 
+    0 10px 20px -5px rgba(0, 0, 0, 0.05);
   transform: translateY(-2px);
 }
 
@@ -70,19 +75,19 @@ body {
   background: transparent;
   border: none;
   padding: 26px 20px 10px 20px;
-  color: #0f172a; 
-  font-family: 'Inter', sans-serif;
+  color: #0f172a;
+  font-family: "Inter", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   outline: none;
-  height: 64px; 
+  height: 64px;
 }
 
 .spatial-label {
   position: absolute;
   left: 20px;
   top: 22px;
-  color: #64748b; 
+  color: #64748b;
   font-size: 0.85rem;
   font-weight: 700;
   pointer-events: none;
@@ -100,7 +105,7 @@ body {
 
 .spatial-input-wrapper-dark {
   position: relative;
-  background: rgba(2, 6, 23, 0.5); 
+  background: rgba(2, 6, 23, 0.5);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
@@ -114,7 +119,7 @@ body {
 .spatial-input-wrapper-dark:focus-within {
   background: rgba(2, 6, 23, 0.9);
   border-color: var(--isu-green);
-  box-shadow: 
+  box-shadow:
     0 0 0 4px rgba(22, 163, 74, 0.2),
     0 10px 20px -5px rgba(0, 0, 0, 0.5);
   transform: translateY(-2px);
@@ -125,8 +130,8 @@ body {
   background: transparent;
   border: none;
   padding: 26px 20px 10px 20px;
-  color: #f1f5f9; 
-  font-family: 'Inter', sans-serif;
+  color: #f1f5f9;
+  font-family: "Inter", sans-serif;
   font-size: 1rem;
   font-weight: 600;
   outline: none;
@@ -137,7 +142,7 @@ body {
   position: absolute;
   left: 20px;
   top: 22px;
-  color: #94a3b8; 
+  color: #94a3b8;
   font-size: 0.85rem;
   font-weight: 700;
   pointer-events: none;
@@ -163,7 +168,7 @@ body {
   letter-spacing: 0.1em;
   text-transform: uppercase;
   overflow: hidden;
-  box-shadow: 
+  box-shadow:
     0 20px 40px -10px rgba(22, 163, 74, 0.4),
     0 10px 20px -10px rgba(22, 163, 74, 0.4),
     inset 0 1px 0 rgba(255, 255, 255, 0.2);
@@ -172,7 +177,7 @@ body {
 
 .btn-premium:hover {
   transform: translateY(-2px);
-  box-shadow: 
+  box-shadow:
     0 20px 40px -10px rgba(22, 163, 74, 0.6),
     0 10px 20px -5px rgba(0, 0, 0, 0.3),
     inset 0 1px 0 rgba(255, 255, 255, 0.3);
@@ -185,7 +190,7 @@ body {
 }
 
 .btn-premium::after {
-  content: '';
+  content: "";
   position: absolute;
   top: 0;
   left: -200%;
@@ -202,14 +207,20 @@ body {
 }
 
 @keyframes shine {
-  0% { left: -200%; }
-  30% { left: 200%; }
-  100% { left: 200%; }
+  0% {
+    left: -200%;
+  }
+  30% {
+    left: 200%;
+  }
+  100% {
+    left: 200%;
+  }
 }
 
 .grid-bg {
   background-size: 60px 60px;
-  background-image: 
+  background-image:
     linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
     linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
   mask-image: radial-gradient(circle at center, black 40%, transparent 100%);
@@ -217,8 +228,13 @@ body {
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px) translateZ(0); }
-  50% { transform: translateY(-10px) translateZ(0); }
+  0%,
+  100% {
+    transform: translateY(0px) translateZ(0);
+  }
+  50% {
+    transform: translateY(-10px) translateZ(0);
+  }
 }
 
 .animate-float {
@@ -232,4 +248,20 @@ body {
   background-clip: text;
   color: transparent;
   text-shadow: 0 0 30px rgba(34, 197, 94, 0.2);
+}
+
+@keyframes gradient {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
+
+.animate-gradient {
+  animation: gradient 6s ease infinite;
 }
