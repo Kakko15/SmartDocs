@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import ThemeToggle from '../components/ui/ThemeToggle';
+import logo from '../assets/logo.png';
 
 const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
   const { scrollY } = useScroll();
@@ -17,6 +18,10 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
     };
     window.addEventListener('scroll', updateScroll);
     return () => window.removeEventListener('scroll', updateScroll);
+  }, []);
+
+  useEffect(() => {
+    document.title = "SmartDocs | Homepage";
   }, []);
 
   const fadeInUp = {
@@ -53,9 +58,7 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
       >
         <div className="w-full px-6 md:px-12 lg:px-20 flex justify-between items-center">
           <div className="flex items-center gap-3">
-            <div className="h-10 w-10 rounded-lg bg-gradient-to-br from-primary-600 to-primary-800 flex items-center justify-center text-white font-bold shadow-lg shadow-primary-500/30">
-              <span className="font-display">SD</span>
-            </div>
+            <img src={logo} alt="SmartDocs Logo" className="h-10 w-10 object-contain drop-shadow-md" />
             <div>
               <h1 className={`text-xl font-bold leading-none tracking-tight font-display ${isDark ? 'text-white' : 'text-slate-900'}`}>SMART<span className="text-primary-600">DOCS</span></h1>
               <p className="text-[10px] tracking-widest text-slate-500 uppercase font-bold">ISU Echague Campus</p>
@@ -202,7 +205,7 @@ const LandingPage = ({ onEnter, isDark, toggleTheme }) => {
           <div className="grid md:grid-cols-4 gap-12 mb-12">
             <div className="col-span-2">
               <div className="flex items-center gap-2 mb-6">
-                 <div className="h-8 w-8 rounded bg-primary-600 flex items-center justify-center text-white font-bold text-sm">SD</div>
+                 <img src={logo} alt="SmartDocs Logo" className="h-8 w-8 object-contain" />
                  <span className={`text-xl font-bold font-display ${isDark ? 'text-white' : 'text-slate-800'}`}>SMARTDOCS</span>
               </div>
               <p className="text-slate-500 text-sm leading-relaxed max-w-sm mb-6">

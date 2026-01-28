@@ -2,6 +2,7 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import { motion, AnimatePresence } from 'framer-motion';
 import { supabase } from '../../lib/supabase';
+import SpotlightBorder from '../ui/SpotlightBorder';
 
 export default function LoginForm({ onSwitchMode, isDark }) {
   const [email, setEmail] = useState('');
@@ -47,15 +48,17 @@ export default function LoginForm({ onSwitchMode, isDark }) {
     <form onSubmit={handleSignIn} className="space-y-6">
        <div>
         <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Email <span className="text-red-500">*</span></label>
-        <input 
-            type="email" 
-            value={email} 
-            onChange={(e) => setEmail(e.target.value)}
-            onBlur={() => handleBlur('email')}
-            required 
-            autoComplete="email"
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('email', email) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
-        />
+        <SpotlightBorder isDark={isDark} error={getFieldError('email', email)}>
+          <input 
+              type="email" 
+              value={email} 
+              onChange={(e) => setEmail(e.target.value)}
+              onBlur={() => handleBlur('email')}
+              required 
+              autoComplete="email"
+              className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('email', email) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+          />
+        </SpotlightBorder>
         <AnimatePresence>
           {getFieldError('email', email) && (
             <motion.p
@@ -79,15 +82,17 @@ export default function LoginForm({ onSwitchMode, isDark }) {
           </button>
         </div>
          <div className="relative">
-          <input 
-              type={showPassword ? "text" : "password"} 
-              value={password} 
-              onChange={(e) => setPassword(e.target.value)}
-              onBlur={() => handleBlur('password')} 
-              required 
-              autoComplete="current-password"
-              className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('password', password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
-          />
+          <SpotlightBorder isDark={isDark} error={getFieldError('password', password)}>
+            <input 
+                type={showPassword ? "text" : "password"} 
+                value={password} 
+                onChange={(e) => setPassword(e.target.value)}
+                onBlur={() => handleBlur('password')} 
+                required 
+                autoComplete="current-password"
+                className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('password', password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            />
+          </SpotlightBorder>
            <button
             type="button"
             tabIndex={-1}

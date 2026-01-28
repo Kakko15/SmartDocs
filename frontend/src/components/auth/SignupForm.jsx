@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import ReCAPTCHA from 'react-google-recaptcha';
 import PasswordStrengthMeter from '../ui/PasswordStrengthMeter';
 import CustomSelect from '../ui/CustomSelect';
+import SpotlightBorder from '../ui/SpotlightBorder';
 
 const RECAPTCHA_SITE_KEY = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
 
@@ -130,14 +131,16 @@ export default function SignupForm({ onSwitchMode, isDark }) {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>First Name <span className="text-red-500">*</span></label>
-          <input 
-            type="text" 
-            value={signUpData.firstName} 
-            onChange={(e) => setSignUpData({ ...signUpData, firstName: e.target.value })} 
-            onBlur={() => handleBlur('firstName')}
-            required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('firstName', signUpData.firstName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
-          />
+          <SpotlightBorder isDark={isDark} error={getFieldError('firstName', signUpData.firstName)}>
+            <input 
+              type="text" 
+              value={signUpData.firstName} 
+              onChange={(e) => setSignUpData({ ...signUpData, firstName: e.target.value })} 
+              onBlur={() => handleBlur('firstName')}
+              required 
+              className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('firstName', signUpData.firstName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            />
+          </SpotlightBorder>
           <AnimatePresence>
             {getFieldError('firstName', signUpData.firstName) && (
               <motion.p
@@ -154,14 +157,16 @@ export default function SignupForm({ onSwitchMode, isDark }) {
         </div>
         <div>
           <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Last Name <span className="text-red-500">*</span></label>
-          <input 
-            type="text" 
-            value={signUpData.lastName} 
-            onChange={(e) => setSignUpData({ ...signUpData, lastName: e.target.value })}
-            onBlur={() => handleBlur('lastName')} 
-            required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('lastName', signUpData.lastName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
-          />
+          <SpotlightBorder isDark={isDark} error={getFieldError('lastName', signUpData.lastName)}>
+            <input 
+              type="text" 
+              value={signUpData.lastName} 
+              onChange={(e) => setSignUpData({ ...signUpData, lastName: e.target.value })}
+              onBlur={() => handleBlur('lastName')} 
+              required 
+              className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('lastName', signUpData.lastName) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            />
+          </SpotlightBorder>
           <AnimatePresence>
             {getFieldError('lastName', signUpData.lastName) && (
               <motion.p
@@ -180,14 +185,16 @@ export default function SignupForm({ onSwitchMode, isDark }) {
 
       <div>
         <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Email <span className="text-red-500">*</span></label>
-        <input 
-          type="email" 
-          value={email} 
-          onChange={(e) => setEmail(e.target.value)} 
-          onBlur={() => handleBlur('email')}
-          required 
-          className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('email', email) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
-        />
+        <SpotlightBorder isDark={isDark} error={getFieldError('email', email)}>
+          <input 
+            type="email" 
+            value={email} 
+            onChange={(e) => setEmail(e.target.value)} 
+            onBlur={() => handleBlur('email')}
+            required 
+            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('email', email) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+          />
+        </SpotlightBorder>
          <AnimatePresence>
             {getFieldError('email', email) && (
               <motion.p
@@ -205,32 +212,36 @@ export default function SignupForm({ onSwitchMode, isDark }) {
 
       <div className="relative z-20">
          <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Designation <span className="text-red-500">*</span></label>
-         <CustomSelect
-            label=""
-            value={signUpData.role}
-            onChange={(val) => setSignUpData({ ...signUpData, role: val })}
-            isDark={isDark}
-            options={[
-              { value: 'student', label: 'Student' }, 
-              { value: 'library_admin', label: 'Library Admin' },
-              { value: 'cashier_admin', label: 'Cashier Admin' },
-              { value: 'registrar_admin', label: 'Registrar Admin' }
-            ]}
-          />
+         <SpotlightBorder isDark={isDark}>
+           <CustomSelect
+              label=""
+              value={signUpData.role}
+              onChange={(val) => setSignUpData({ ...signUpData, role: val })}
+              isDark={isDark}
+              options={[
+                { value: 'student', label: 'Student' }, 
+                { value: 'library_admin', label: 'Library Admin' },
+                { value: 'cashier_admin', label: 'Cashier Admin' },
+                { value: 'registrar_admin', label: 'Registrar Admin' }
+              ]}
+            />
+         </SpotlightBorder>
       </div>
 
       {signUpData.role === 'student' && (
          <div className="grid grid-cols-2 gap-4">
             <div>
               <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Given ID No. <span className="text-red-500">*</span></label>
-              <input 
-                type="text" 
-                value={signUpData.studentNumber} 
-                onChange={(e) => setSignUpData({ ...signUpData, studentNumber: e.target.value })} 
-                onBlur={() => handleBlur('studentNumber')}
-                required 
-                className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('studentNumber', signUpData.studentNumber) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
-              />
+              <SpotlightBorder isDark={isDark} error={getFieldError('studentNumber', signUpData.studentNumber)}>
+                <input 
+                  type="text" 
+                  value={signUpData.studentNumber} 
+                  onChange={(e) => setSignUpData({ ...signUpData, studentNumber: e.target.value })} 
+                  onBlur={() => handleBlur('studentNumber')}
+                  required 
+                  className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('studentNumber', signUpData.studentNumber) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
+                />
+              </SpotlightBorder>
               <AnimatePresence>
                 {getFieldError('studentNumber', signUpData.studentNumber) && (
                   <motion.p
@@ -247,14 +258,16 @@ export default function SignupForm({ onSwitchMode, isDark }) {
             </div>
             <div>
               <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Course/Year <span className="text-red-500">*</span></label>
-              <input 
-                type="text" 
-                value={signUpData.courseYear} 
-                onChange={(e) => setSignUpData({ ...signUpData, courseYear: e.target.value })} 
-                onBlur={() => handleBlur('courseYear')}
-                required 
-                className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('courseYear', signUpData.courseYear) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
-              />
+              <SpotlightBorder isDark={isDark} error={getFieldError('courseYear', signUpData.courseYear)}>
+                <input 
+                  type="text" 
+                  value={signUpData.courseYear} 
+                  onChange={(e) => setSignUpData({ ...signUpData, courseYear: e.target.value })} 
+                  onBlur={() => handleBlur('courseYear')}
+                  required 
+                  className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('courseYear', signUpData.courseYear) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`} 
+                />
+              </SpotlightBorder>
               <AnimatePresence>
                 {getFieldError('courseYear', signUpData.courseYear) && (
                   <motion.p
@@ -275,15 +288,17 @@ export default function SignupForm({ onSwitchMode, isDark }) {
       <div>
         <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Password <span className="text-red-500">*</span></label>
         <div className="relative">
-          <input 
-            type={showPassword ? "text" : "password"} 
-            value={password} 
-            onChange={(e) => setPassword(e.target.value)}
-            onFocus={() => setIsPasswordFocused(true)}
-            onBlur={() => handleBlur('password')}
-            required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('password', password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
-          />
+          <SpotlightBorder isDark={isDark} error={getFieldError('password', password)}>
+            <input 
+              type={showPassword ? "text" : "password"} 
+              value={password} 
+              onChange={(e) => setPassword(e.target.value)}
+              onFocus={() => setIsPasswordFocused(true)}
+              onBlur={() => handleBlur('password')}
+              required 
+              className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('password', password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            />
+          </SpotlightBorder>
           <div className="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
             <AnimatePresence>
               {password && confirmPassword && password === confirmPassword && (
@@ -335,14 +350,16 @@ export default function SignupForm({ onSwitchMode, isDark }) {
       <div>
         <label className={`block text-sm font-bold mb-1.5 ml-1 ${isDark ? 'text-slate-300' : 'text-gray-700'}`}>Confirm Password <span className="text-red-500">*</span></label>
         <div className="relative">
-           <input 
-            type={showConfirmPassword ? "text" : "password"} 
-            value={confirmPassword} 
-            onChange={(e) => setConfirmPassword(e.target.value)} 
-            onBlur={() => handleBlur('confirmPassword')}
-            required 
-            className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('confirmPassword', confirmPassword, password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
-          />
+           <SpotlightBorder isDark={isDark} error={getFieldError('confirmPassword', confirmPassword, password)}>
+             <input 
+              type={showConfirmPassword ? "text" : "password"} 
+              value={confirmPassword} 
+              onChange={(e) => setConfirmPassword(e.target.value)} 
+              onBlur={() => handleBlur('confirmPassword')}
+              required 
+              className={`w-full border rounded-xl px-4 py-3 outline-none transition-all font-medium ${isDark ? 'bg-slate-900 border-slate-700 text-white focus:border-green-500' : 'bg-white border-gray-200 text-gray-900 focus:border-green-500 focus:ring-1 focus:ring-green-500'} ${getFieldError('confirmPassword', confirmPassword, password) ? '!border-red-500 focus:!border-red-500 !ring-red-500 bg-red-50 text-red-900' : ''}`}
+            />
+           </SpotlightBorder>
           <div className="absolute right-12 top-1/2 -translate-y-1/2 pointer-events-none flex items-center justify-center">
              <AnimatePresence>
               {password && confirmPassword && password === confirmPassword && (

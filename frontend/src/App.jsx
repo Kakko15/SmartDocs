@@ -11,6 +11,7 @@ import Loader from './components/ui/Loader';
 import LandingPage from './pages/LandingPage';
 import PixelTrail from './components/visuals/PixelTrail';
 import AuthPage from './pages/auth/AuthPage';
+import logo from './assets/logo.png';
 
 function App() {
   // --- EXISTING STATE & LOGIC ---
@@ -211,9 +212,7 @@ function App() {
                       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                         <div className="flex justify-between items-center h-20">
                           <div className="flex items-center gap-4">
-                            <div className="flex items-center justify-center w-12 h-12 rounded-full border border-primary-500/30 bg-primary-500/10 shadow-[0_0_15px_rgba(34,197,94,0.2)]">
-                              <span className="text-primary-400 font-bold text-xl">SD</span>
-                            </div>
+                            <img src={logo} alt="SmartDocs Logo" className="w-12 h-12 object-contain" />
                             <div>
                               <h1 className="font-display text-xl font-bold text-white tracking-wider">SMARTDOCS</h1>
                               <div className="flex items-center gap-2">

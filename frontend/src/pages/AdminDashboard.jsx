@@ -6,6 +6,7 @@ import Announcements from '../components/features/Announcements';
 import RequestHistory from '../components/features/RequestHistory';
 import DocumentUpload from '../components/features/DocumentUpload';
 import RequestComments from '../components/features/RequestComments';
+import logo from '../assets/logo.png';
 
 const THEME = {
   bg: 'bg-[#020617]',
@@ -87,6 +88,7 @@ export default function AdminDashboard({ adminId, adminRole, onSignOut }) {
   const [rejectReason, setRejectReason] = useState('');
 
   useEffect(() => {
+    document.title = "SmartDocs | Admin Portal";
     loadData();
   }, [adminRole]);
 
@@ -184,9 +186,7 @@ export default function AdminDashboard({ adminId, adminRole, onSignOut }) {
         
         <header className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-6">
-            <div className="w-16 h-16 rounded-[20px] bg-gradient-to-br from-white/10 to-white/5 border border-white/10 backdrop-blur-xl flex items-center justify-center shadow-2xl">
-              <span className="font-display font-bold text-2xl text-white tracking-tighter">SD</span>
-            </div>
+            <img src={logo} alt="SmartDocs Logo" className="w-16 h-16 object-contain drop-shadow-2xl" />
             <div>
               <h1 className="text-4xl font-display font-medium text-white tracking-tight">
                 Cashier<span className="text-white/30">Console</span>

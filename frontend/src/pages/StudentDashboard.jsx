@@ -21,6 +21,7 @@ export default function StudentDashboard({ studentId, studentInfo }) {
   const [deleteConfirm, setDeleteConfirm] = useState({ show: false, requestId: null, requestName: '' });
 
   useEffect(() => {
+    document.title = "SmartDocs | Student Portal";
     fetchRequests();
   }, []);
 

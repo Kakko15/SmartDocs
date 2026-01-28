@@ -4,43 +4,63 @@ export default function ThemeToggle({ isDark, toggle }) {
   return (
     <button
       onClick={toggle}
-      className={`relative w-16 h-8 rounded-full p-1 transition-colors duration-300 focus:outline-none ${
-        isDark ? 'bg-slate-700' : 'bg-blue-100'
-      }`}
+      className={`relative w-16 h-8 rounded-full p-1 transition-all duration-300 focus:outline-none flex items-center ${
+        isDark ? 'bg-slate-800 shadow-[inset_0_2px_4px_rgba(0,0,0,0.6)]' : 'bg-blue-100 shadow-[inset_0_2px_4px_rgba(0,0,0,0.1)]'
+      } ${isDark ? 'justify-end' : 'justify-start'}`}
       aria-label="Toggle Theme"
     >
       <motion.div
-        className={`w-6 h-6 rounded-full shadow-sm flex items-center justify-center ${
-          isDark ? 'bg-slate-900' : 'bg-white'
+        className={`w-6 h-6 rounded-full shadow-md flex items-center justify-center relative z-10 ${
+          isDark ? 'bg-slate-950 border border-slate-700' : 'bg-white'
         }`}
         layout
         transition={{ type: "spring", stiffness: 700, damping: 30 }}
-        style={{
-          marginLeft: isDark ? 'auto' : 0,
-          marginRight: isDark ? 0 : 'auto',
-        }}
       >
         <motion.div
           initial={false}
-          animate={{ rotate: isDark ? 180 : 0, scale: isDark ? 1 : 0 }}
+          animate={{ rotate: isDark ? 0 : 90, scale: isDark ? 1 : 0, opacity: isDark ? 1 : 0 }}
           transition={{ duration: 0.2 }}
-          className="absolute"
+          className="absolute flex items-center justify-center"
         >
           {/* Moon Icon */}
-          <svg className="w-4 h-4 text-blue-300" fill="currentColor" viewBox="0 0 24 24">
-            <path d="M21.752 15.002A9.718 9.718 0 0118 15.75c-5.385 0-9.75-4.365-9.75-9.75 0-1.33.266-2.597.748-3.752A9.753 9.753 0 003 11.25C3 16.635 7.365 21 12.75 21a9.753 9.753 0 009.002-5.998z" />
+          <svg 
+            className="w-4 h-4 text-sky-100 drop-shadow-[0_0_3px_rgba(224,242,254,0.5)]" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            viewBox="0 0 24 24"
+          >
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
           </svg>
         </motion.div>
         
         <motion.div
           initial={false}
-          animate={{ rotate: isDark ? -180 : 0, scale: isDark ? 0 : 1 }}
+          animate={{ rotate: isDark ? -90 : 0, scale: isDark ? 0 : 1, opacity: isDark ? 0 : 1 }}
           transition={{ duration: 0.2 }}
-          className="absolute"
+          className="absolute flex items-center justify-center"
         >
           {/* Sun Icon */}
-          <svg className="w-4 h-4 text-orange-400" fill="currentColor" viewBox="0 0 24 24">
-             <path d="M12 2.25a.75.75 0 01.75.75v2.25a.75.75 0 01-1.5 0V3a.75.75 0 01.75-.75zM7.5 12a4.5 4.5 0 119 0 4.5 4.5 0 01-9 0zM18.894 6.166a.75.75 0 00-1.06-1.06l-1.591 1.59a.75.75 0 101.06 1.061l1.591-1.59zM21.75 12a.75.75 0 01-.75.75h-2.25a.75.75 0 010-1.5H21a.75.75 0 01.75.75zM17.834 18.894a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 10-1.061 1.06l1.59 1.591zM12 18a.75.75 0 01.75.75V21a.75.75 0 01-1.5 0v-2.25A.75.75 0 0112 18zM7.758 17.303a.75.75 0 00-1.061-1.06l-1.591 1.59a.75.75 0 001.06 1.061l1.591-1.59zM6 12a.75.75 0 01-.75.75H3a.75.75 0 010-1.5h2.25A.75.75 0 016 12zM6.697 7.757a.75.75 0 001.06-1.06l-1.59-1.591a.75.75 0 00-1.061 1.06l1.59 1.591z" />
+          <svg 
+            className="w-4 h-4 text-orange-500 drop-shadow-[0_0_2px_rgba(249,115,22,0.4)]" 
+            fill="none" 
+            stroke="currentColor" 
+            strokeWidth="2" 
+            strokeLinecap="round" 
+            strokeLinejoin="round" 
+            viewBox="0 0 24 24"
+          >
+             <circle cx="12" cy="12" r="4" />
+             <path d="M12 2v2" />
+             <path d="M12 20v2" />
+             <path d="M4.93 4.93l1.41 1.41" />
+             <path d="M17.66 17.66l1.41 1.41" />
+             <path d="M2 12h2" />
+             <path d="M20 12h2" />
+             <path d="M6.34 17.66l-1.41 1.41" />
+             <path d="M19.07 4.93l-1.41 1.41" />
           </svg>
         </motion.div>
       </motion.div>

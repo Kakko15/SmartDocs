@@ -1,11 +1,16 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import LoginForm from "../../components/auth/LoginForm";
 import SignupForm from "../../components/auth/SignupForm";
 import Particles from "../../components/visuals/Particles";
+import logo from "../../assets/logo.png";
 
 export default function AuthPage({ onBackToHome, isDark }) {
   const [isSignUp, setIsSignUp] = useState(false);
+
+  useEffect(() => {
+    document.title = isSignUp ? "SmartDocs | Signup" : "SmartDocs | Login";
+  }, [isSignUp]);
 
   return (
     <div className={`relative flex min-h-screen items-center justify-center p-4 overflow-x-hidden transition-colors duration-500 ${isDark ? 'bg-slate-950' : 'bg-[#f8fafc]'}`}>
@@ -56,9 +61,7 @@ export default function AuthPage({ onBackToHome, isDark }) {
         >
           <div className="flex items-center justify-between mb-6">
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 bg-yellow-400 rounded-full flex items-center justify-center shadow-md">
-                <span className="font-bold text-black text-xs">SD</span>
-              </div>
+              <img src={logo} alt="SmartDocs Logo" className="w-10 h-10 object-contain drop-shadow-md" />
             </div>
             <button
               onClick={onBackToHome}
